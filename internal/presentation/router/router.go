@@ -27,7 +27,7 @@ func Setup(ctx context.Context, appConfig *config.AppConfig) (*gin.Engine, error
 	return r, nil
 }
 
-func initializeHandler(ctx context.Context, appConfig *config.AppConfig) (*handler.Articles, error) {
+func initializeHandler(ctx context.Context, appConfig *config.AppConfig) (*handler.ArticlesHandler, error) {
 	// gateway
 	dynamoDB, err := gateway.NewDynamoDB(ctx, appConfig)
 	if err != nil {

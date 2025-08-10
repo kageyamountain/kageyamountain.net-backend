@@ -2,29 +2,29 @@ package handler
 
 import (
 	"fmt"
-	"log"
+	"log/slog"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/application/usecase"
 )
 
-type Articles struct {
+type ArticlesHandler struct {
 	useCase usecase.ArticlesUseCase
 }
 
-func NewArticles(useCase usecase.ArticlesUseCase) *Articles {
-	return &Articles{
+func NewArticles(useCase usecase.ArticlesUseCase) *ArticlesHandler {
+	return &ArticlesHandler{
 		useCase: useCase,
 	}
 }
 
-func (a *Articles) Execute(c *gin.Context) {
+func (a *ArticlesHandler) Execute(c *gin.Context) {
 	ctx := c.Request.Context()
 
 	articles, err := a.useCase.Execute(ctx)
 	if err != nil {
-		log.Println("Error executing Articles use case:", err)
+		slog.Error("failed to articles use case", slog.Any("err", err))
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
 		return
 	}
