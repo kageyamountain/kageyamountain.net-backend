@@ -1,0 +1,22 @@
+# デフォルトの無視対象ファイル
+/shelf/
+/workspace.xml
+
+# エディターベースの HTTP クライアントリクエスト
+/httpRequests/
+
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+
+# 個人設定
+/tasks.xml
+/dictionaries/
+/usage.statistics.xml
+
+# 個人の実行設定（共有設定は除く）
+/runConfigurations/*
+!/runConfigurations/shared_*.xml
+
+# その他の個人設定
+/git_toolbox_prj.xml

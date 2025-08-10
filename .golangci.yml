@@ -1,0 +1,83 @@
+version: "2"
+
+run:
+  timeout: 5m
+  tests: true
+  concurrency: 8
+
+output:
+  formats:
+    text:
+      print-linter-name: true
+      print-issued-lines: true
+      colors: true
+  path-prefix: ""
+  sort-order:
+    - linter
+    - severity
+    - file
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  uniq-by-line: true
+
+linters:
+  default: none  # 全て無効にしてから個別にenableする
+  enable:
+    - errcheck      # エラーハンドリング
+    - govet         # go vet相当
+    - ineffassign   # 無効な代入
+    - staticcheck   # 静的解析
+    - unused        # 未使用コード
+    - misspell      # スペルミス
+    - gocritic      # 詳細なコード分析
+    - revive        # golintの後継
+    - gosec         # セキュリティチェック
+
+  settings:
+    errcheck:
+      check-type-assertions: true
+      check-blank: true
+
+    gocritic:
+      enabled-tags:
+        - performance
+        - style
+        - experimental
+      disabled-checks:
+        - commentedOutCode
+
+    # revive設定
+    revive:
+      rules:
+        - name: package-comments
+          disabled: true  # パッケージのコメント要求を無効化
+        - name: exported
+          disabled: true  # 関数名から始まるコメント要求を無効化
+
+  exclusions:
+    generated: lax  # 生成コードを緩やかに検出して除外
+
+    rules:
+      - path: _test\.go # テストファイルでの無効化
+        linters:
+          - gosec
+
+      - path: ".*_gen\\.go$" # 生成コードでの無効化
+        linters:
+          - gosec
+
+      - path: "mock/" # mock/ ディレクトリでの無効化
+        linters:
+          - gosec
+
+formatters:
+  enable:
+    - gofmt         # フォーマット
+    - goimports     # import整理
+
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/kageyamountain/kageyamountain.net/backend
