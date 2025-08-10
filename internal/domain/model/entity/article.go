@@ -28,7 +28,7 @@ type NewArticleInput struct {
 	Tags          []string
 }
 
-func NewArticle(input NewArticleInput) (*Article, error) {
+func NewArticle(input *NewArticleInput) (*Article, error) {
 	if input.PK == "" {
 		return nil, errors.New("partition key is required")
 	}
@@ -59,10 +59,10 @@ func NewArticle(input NewArticleInput) (*Article, error) {
 	}, nil
 }
 
-func (a Article) IsDraft() bool {
+func (a *Article) IsDraft() bool {
 	return a.Status.Value() == value.StatusDraft
 }
 
-func (a Article) IsPublish() bool {
+func (a *Article) IsPublish() bool {
 	return a.Status.Value() == value.StatusPublish
 }

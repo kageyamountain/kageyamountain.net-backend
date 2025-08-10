@@ -7,5 +7,5 @@ import (
 )
 
 type ArticleRepository interface {
-	FindAllForList(ctx context.Context) ([]entity.Article, error)
+	FindAllForList(ctx context.Context) ([]*entity.Article, error)
 }

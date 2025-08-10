@@ -23,7 +23,7 @@ func NewArticleRepository(dynamoDB *gateway.DynamoDB) repository.ArticleReposito
 	}
 }
 
-func (a articleRepository) FindAllForList(ctx context.Context) ([]entity.Article, error) {
+func (a articleRepository) FindAllForList(ctx context.Context) ([]*entity.Article, error) {
 	// データ取得仕様の定義
 	keyCondition := expression.Key("status").Equal(expression.Value("publish"))
 	projection := expression.NamesList(
@@ -53,16 +53,16 @@ func (a articleRepository) FindAllForList(ctx context.Context) ([]entity.Article
 	}
 
 	// DBModelにマッピング
-	var dbModels []dbmodel.Article
+	var dbModels []*dbmodel.Article
 	err = attributevalue.UnmarshalListOfMaps(result.Items, &dbModels)
 	if err != nil {
 		return nil, err
 	}
 
 	// DomainModelに変換
-	var domainModels []entity.Article
+	var domainModels []*entity.Article
 	for _, dbModel := range dbModels {
-		domainModel, err := entity.NewArticle(entity.NewArticleInput{
+		domainModel, err := entity.NewArticle(&entity.NewArticleInput{
 			PK:          dbModel.PK,
 			Status:      dbModel.Status,
 			PublishedAt: dbModel.PublishedAt,
@@ -73,7 +73,7 @@ func (a articleRepository) FindAllForList(ctx context.Context) ([]entity.Article
 			return nil, err
 		}
 
-		domainModels = append(domainModels, *domainModel)
+		domainModels = append(domainModels, domainModel)
 	}
 
 	return domainModels, nil

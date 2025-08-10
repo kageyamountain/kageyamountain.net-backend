@@ -69,7 +69,7 @@ func main() {
 	}
 
 	// 結果をArticle構造体にマッピング
-	var articles []dbmodel.Article
+	var articles []*dbmodel.Article
 	err = attributevalue.UnmarshalListOfMaps(result.Items, &articles)
 	if err != nil {
 		log.Fatalf("unmarshal error: %v", err)

@@ -22,7 +22,7 @@ func NewArticles(articleRepository repository.ArticleRepository) ArticlesUseCase
 }
 
 type ArticlesUseCaseOutput struct {
-	Articles []ArticlesUseCaseOutputRow
+	Articles []*ArticlesUseCaseOutputRow
 }
 
 type ArticlesUseCaseOutputRow struct {
@@ -41,10 +41,10 @@ func (a *articles) Execute(ctx context.Context) (*ArticlesUseCaseOutput, error) 
 	return a.convertToOutput(articlesEntity), nil
 }
 
-func (a *articles) convertToOutput(articles []entity.Article) *ArticlesUseCaseOutput {
+func (a *articles) convertToOutput(articles []*entity.Article) *ArticlesUseCaseOutput {
 	var output ArticlesUseCaseOutput
 	for _, article := range articles {
-		outputRow := ArticlesUseCaseOutputRow{
+		outputRow := &ArticlesUseCaseOutputRow{
 			PK:          article.PK,
 			PublishedAt: article.PublishedAt,
 			Title:       article.Title,
