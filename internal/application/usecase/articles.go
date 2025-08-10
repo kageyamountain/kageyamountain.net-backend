@@ -7,32 +7,32 @@ import (
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/repository"
 )
 
-type ArticlesUseCase interface {
-	Execute(ctx context.Context) (*ArticlesUseCaseOutput, error)
+type ArticlesGetUseCase interface {
+	Execute(ctx context.Context) (*ArticlesGetUseCaseOutput, error)
 }
 
-type articles struct {
+type articlesGetUseCase struct {
 	articleRepository repository.ArticleRepository
 }
 
-func NewArticles(articleRepository repository.ArticleRepository) ArticlesUseCase {
-	return &articles{
+func NewArticlesUseCase(articleRepository repository.ArticleRepository) ArticlesGetUseCase {
+	return &articlesGetUseCase{
 		articleRepository: articleRepository,
 	}
 }
 
-type ArticlesUseCaseOutput struct {
-	Articles []*ArticlesUseCaseOutputRow
+type ArticlesGetUseCaseOutput struct {
+	Articles []*ArticlesGetUseCaseOutputRow
 }
 
-type ArticlesUseCaseOutputRow struct {
+type ArticlesGetUseCaseOutputRow struct {
 	PK          string
 	PublishedAt string
 	Title       string
 	Tags        []string
 }
 
-func (a *articles) Execute(ctx context.Context) (*ArticlesUseCaseOutput, error) {
+func (a *articlesGetUseCase) Execute(ctx context.Context) (*ArticlesGetUseCaseOutput, error) {
 	articlesEntity, err := a.articleRepository.FindAllForList(ctx)
 	if err != nil {
 		return nil, err
@@ -41,10 +41,10 @@ func (a *articles) Execute(ctx context.Context) (*ArticlesUseCaseOutput, error) 
 	return a.convertToOutput(articlesEntity), nil
 }
 
-func (a *articles) convertToOutput(articles []*entity.Article) *ArticlesUseCaseOutput {
-	var output ArticlesUseCaseOutput
+func (a *articlesGetUseCase) convertToOutput(articles []*entity.Article) *ArticlesGetUseCaseOutput {
+	var output ArticlesGetUseCaseOutput
 	for _, article := range articles {
-		outputRow := &ArticlesUseCaseOutputRow{
+		outputRow := &ArticlesGetUseCaseOutputRow{
 			PK:          article.PK,
 			PublishedAt: article.PublishedAt,
 			Title:       article.Title,

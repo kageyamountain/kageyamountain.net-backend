@@ -9,17 +9,18 @@ import (
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/application/usecase"
 )
 
-type ArticlesHandler struct {
-	useCase usecase.ArticlesUseCase
+type ArticlesGetHandler struct {
+	useCase usecase.ArticlesGetUseCase
 }
 
-func NewArticles(useCase usecase.ArticlesUseCase) *ArticlesHandler {
-	return &ArticlesHandler{
+func NewArticlesGetHandler(useCase usecase.ArticlesGetUseCase) *ArticlesGetHandler {
+	return &ArticlesGetHandler{
 		useCase: useCase,
 	}
 }
 
-func (a *ArticlesHandler) Execute(c *gin.Context) {
+// GET /articles エンドポイント
+func (a *ArticlesGetHandler) Execute(c *gin.Context) {
 	ctx := c.Request.Context()
 
 	articles, err := a.useCase.Execute(ctx)

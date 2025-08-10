@@ -27,7 +27,7 @@ func Setup(ctx context.Context, appConfig *config.AppConfig) (*gin.Engine, error
 	return r, nil
 }
 
-func initializeHandler(ctx context.Context, appConfig *config.AppConfig) (*handler.ArticlesHandler, error) {
+func initializeHandler(ctx context.Context, appConfig *config.AppConfig) (*handler.ArticlesGetHandler, error) {
 	// gateway
 	dynamoDB, err := gateway.NewDynamoDB(ctx, appConfig)
 	if err != nil {
@@ -38,10 +38,10 @@ func initializeHandler(ctx context.Context, appConfig *config.AppConfig) (*handl
 	articleRepository := repository.NewArticleRepository(dynamoDB)
 
 	// UseCase
-	articlesUsecase := usecase.NewArticles(articleRepository)
+	articlesUsecase := usecase.NewArticlesUseCase(articleRepository)
 
 	// Handler
-	articlesHandler := handler.NewArticles(articlesUsecase)
+	articlesHandler := handler.NewArticlesGetHandler(articlesUsecase)
 
 	return articlesHandler, nil
 }
