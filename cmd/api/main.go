@@ -2,43 +2,53 @@ package main
 
 import (
 	"context"
-	"log"
+	"log/slog"
 	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/kageyamountain/kageyamountain.net-backend/common/config"
+	"github.com/kageyamountain/kageyamountain.net-backend/common/logger"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/router"
 )
 
 func main() {
 	ctx := context.Background()
 
+	// logger設定（カスタムslogハンドラを設定）
+	handler := logger.NewAppLogHandler(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+		Level: slog.LevelInfo,
+	}))
+	slog.SetDefault(slog.New(handler))
+
+	// Ginのデフォルトログを無効化
+	gin.SetMode(gin.ReleaseMode)
+
+	// 環境変数のロード（dev環境のみ）
 	err := loadEnvFileOnlyDev()
 	if err != nil {
-		log.Fatal("Error loading .env file:", err)
+		slog.Error("failed to load .env file.", slog.Any("err", err))
 		return
 	}
 
+	// 環境変数をAppConfigへマッピング
 	appConfig, err := config.Load()
 	if err != nil {
-		log.Fatal("Error AppConfig Load. err:", err)
+		slog.Error("failed to AppConfig Load.", slog.Any("err", err))
 		return
 	}
-	log.Println("appConfig:", appConfig)
 
-	// TODO ENV毎にmode変更
-	gin.SetMode(gin.DebugMode)
-
+	// ルーティングの設定
 	r, err := router.Setup(ctx, appConfig)
 	if err != nil {
-		log.Fatal("Error router setup. err:", err)
+		slog.Error("failed to setup router.", slog.Any("err", err))
 		return
 	}
 
+	// Webサーバーの起動
 	err = r.Run("localhost:8080")
 	if err != nil {
-		log.Fatal("Error gin.Run. err:", err)
+		slog.Error("failed to run server.", slog.Any("err", err))
 		return
 	}
 }
