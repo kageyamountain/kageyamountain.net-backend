@@ -1,0 +1,84 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  # build
+  dev:
+    desc: 開発サーバー起動
+    silent: true
+    env:
+      ENV: dev
+    cmds:
+      - go run cmd/api/main.go
+
+  # docker
+  compose-up:
+    desc: 開発用コンテナ起動
+    silent: true
+    cmds:
+      - docker compose up -d --build
+
+  compose-down:
+    desc: 開発用コンテナ停止
+    silent: true
+    cmds:
+      - docker compose down
+
+  # lint
+  lint:
+    desc: lint実行
+    silent: true
+    cmds:
+      - go tool golangci-lint run
+
+  lint-fix:
+    desc: lint-fix実行
+    silent: true
+    cmds:
+      - go tool golangci-lint run --fix
+
+  # DynamoDB local
+  table-create:
+    desc: 開発用DynamoDBのテーブルを作成
+    silent: true
+    preconditions:
+      - test -f aws/dynamodb/table/article.json
+    cmds:
+      - aws dynamodb create-table --cli-input-json file://aws/dynamodb/table/article.json --endpoint-url http://localhost:8000 --no-cli-pager
+
+  table-delete:
+    desc: 開発用DynamoDBのテーブルを削除
+    silent: true
+    cmds:
+      - aws dynamodb delete-table --table-name article --endpoint-url http://localhost:8000 --no-cli-pager
+
+  table-reset:
+    desc: 開発用DynamoDBのテーブルをリセット
+    deps: [ table-delete ]
+    cmds:
+      - sleep 2
+      - task: table-create
+
+  table-describe:
+    desc: 開発用DynamoDBのテーブル定義を表示
+    cmds:
+      - aws dynamodb describe-table --table-name article --endpoint-url http://localhost:8000 --no-cli-pager
+
+  table-list:
+    desc: 開発用DynamoDBのテーブル一覧を表示
+    silent: true
+    cmds:
+      - aws dynamodb list-tables --endpoint-url http://localhost:8000 --no-cli-pager
+
+  # OpenAPI
+  oapi-gen:
+    desc: OpenAPI定義書YAMLからGoコードを生成
+    silent: false
+    preconditions:
+      - test -f internal/presentation/openapi/api.yaml
+    cmds:
+      - rm -f internal/presentation/openapi/generate/*.gen.go
+      - go tool oapi-codegen -generate types -package openapi -o internal/presentation/openapi/generate/types.gen.go internal/presentation/openapi/api.yaml
+      - go tool oapi-codegen -generate gin -package openapi -o internal/presentation/openapi/generate/handler.gen.go internal/presentation/openapi/api.yaml
+      - go tool oapi-codegen -generate client -package openapi -o internal/presentation/openapi/generate/client.gen.go internal/presentation/openapi/api.yaml

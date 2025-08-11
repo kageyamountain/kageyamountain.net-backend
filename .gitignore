@@ -1,0 +1,2 @@
+# local DynamoDB data file
+/docker/dynamodb/shared-local-instance.db

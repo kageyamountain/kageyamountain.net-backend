@@ -1,0 +1,135 @@
+openapi: 3.0.4
+info:
+  title: kageyamountain.net API
+  description: API documentation for kageyamountain.net
+  version: 1.0.0
+  contact:
+    name: kageyamountain
+servers: &servers
+  - url: http://localhost:8080
+    description: development server
+paths:
+  /articles:
+    servers: *servers
+    get:
+      summary: 記事一覧情報取得API
+      description: 記事一覧の情報を取得する
+      operationId: articlesGet
+      tags:
+        - articles
+      parameters:
+        - name: publish-year
+          in: query
+          description: 公開年でフィルタリング
+          schema:
+            type: integer
+            example: 2024
+        - name: tags
+          in: query
+          description: |
+            タグでフィルタリング（複数指定可能）
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example: ["Go", "JavaScript", "AWS"]
+      responses:
+        '200':
+          description: 成功
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticlesGetResponseBody'
+        '500':
+          description: サーバーエラー
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  headers:
+    RequestID:
+      description: リクエストID
+      schema:
+        $ref: '#/components/schemas/RequestID'
+  schemas:
+    ArticlesGetResponseBody:
+      type: object
+      required:
+        - articles
+      properties:
+        articles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Article'
+
+    RequestID:
+      type: string
+      description: リクエストID（UUID形式）
+      example: "123e4567-e89b-12d3-a456-426614174000"
+
+    Article:
+      type: object
+      required:
+        - id
+        - published_at
+        - title
+        - tags
+      properties:
+        id:
+          type: string
+          description: 記事ID（UUID形式）
+          example: "123e4567-e89b-12d3-a456-426655440000"
+        published_at:
+          type: string
+          format: date-time
+          description: 公開日時（UTC）
+          example: "2025-01-15T12:00:00Z"
+        title:
+          type: string
+          description: 記事タイトル
+          example: "Go言語入門"
+        tags:
+          type: array
+          items:
+            type: string
+          example: ["Go", "JavaScript", "AWS"]
+
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+        message:
+          type: string
+          description: エラーメッセージ
+          example: "internal server error"
+        details:
+          type: object
+          description: エラーの詳細情報
+          additionalProperties:
+            type: string
+          example:
+            {
+              "code": "internal_server_error",
+              "message": "internal server error",
+              "detail": "server is busy",
+            }
+
+    ErrorCode:
+      description: エラーコード
+      type: string
+      enum:
+        - internal_server_error
