@@ -23,6 +23,8 @@ func NewArticlesGetHandler(useCase usecase.ArticlesGetUseCase) *ArticlesGetHandl
 func (a *ArticlesGetHandler) ArticlesGet(c *gin.Context, params openapi.ArticlesGetParams) {
 	ctx := c.Request.Context()
 
+	// TODO リクエストパラメータを利用した公開年とタグのフィルタリング機能実装
+
 	// ユースケースの実行
 	useCaseOutput, err := a.useCase.Execute(ctx)
 	if err != nil {
