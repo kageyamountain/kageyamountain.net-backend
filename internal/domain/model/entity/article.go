@@ -18,7 +18,7 @@ type Article struct {
 }
 
 type NewArticleInput struct {
-	PK            string
+	ID            string
 	Status        string
 	CreatedAt     string
 	PublishedAt   string
@@ -29,7 +29,7 @@ type NewArticleInput struct {
 }
 
 func NewArticle(input *NewArticleInput) (*Article, error) {
-	if input.PK == "" {
+	if input.ID == "" {
 		return nil, errors.New("partition key is required")
 	}
 
@@ -48,7 +48,7 @@ func NewArticle(input *NewArticleInput) (*Article, error) {
 	}
 
 	return &Article{
-		PK:            input.PK,
+		PK:            input.ID,
 		Status:        status,
 		CreatedAt:     input.CreatedAt,
 		PublishedAt:   input.PublishedAt,

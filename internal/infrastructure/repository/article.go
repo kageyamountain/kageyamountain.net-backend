@@ -63,7 +63,7 @@ func (a articleRepository) FindAllForList(ctx context.Context) ([]*entity.Articl
 	var domainModels []*entity.Article
 	for _, dbModel := range dbModels {
 		domainModel, err := entity.NewArticle(&entity.NewArticleInput{
-			PK:          dbModel.PK,
+			ID:          dbModel.PK,
 			Status:      dbModel.Status,
 			PublishedAt: dbModel.PublishedAt,
 			Title:       dbModel.Title,
