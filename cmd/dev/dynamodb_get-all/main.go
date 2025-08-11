@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/kageyamountain/kageyamountain.net-backend/common/config"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository/dbmodel"
 
 	"github.com/aws/aws-sdk-go-v2/aws"

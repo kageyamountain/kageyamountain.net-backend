@@ -7,7 +7,7 @@ import (
 	awsConfig "github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/kageyamountain/kageyamountain.net-backend/common/config"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
 )
 
 type DynamoDB struct {

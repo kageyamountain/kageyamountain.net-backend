@@ -7,8 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"github.com/kageyamountain/kageyamountain.net-backend/common/config"
-	"github.com/kageyamountain/kageyamountain.net-backend/common/logger"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/logger"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/router"
 )
 

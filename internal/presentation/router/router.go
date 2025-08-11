@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/gin-gonic/gin"
-	"github.com/kageyamountain/kageyamountain.net-backend/common/config"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/application/usecase"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/gateway"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/handler"

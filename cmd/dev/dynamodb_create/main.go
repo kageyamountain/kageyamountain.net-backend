@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/kageyamountain/kageyamountain.net-backend/common/config"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository/dbmodel"
 
