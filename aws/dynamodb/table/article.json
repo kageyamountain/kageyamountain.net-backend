@@ -18,7 +18,7 @@
     },
     {
       "AttributeName": "publishedAt",
-      "AttributeType": "S"
+      "AttributeType": "N"
     },
     {
       "AttributeName": "publishedYear",
@@ -26,7 +26,7 @@
     },
     {
       "AttributeName": "createdAt",
-      "AttributeType": "S"
+      "AttributeType": "N"
     }
   ],
   "GlobalSecondaryIndexes": [

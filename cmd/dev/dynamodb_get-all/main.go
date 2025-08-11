@@ -78,6 +78,6 @@ func main() {
 	// 結果を表示
 	fmt.Printf("取得した記事数: %d\n", len(articles))
 	for i, article := range articles {
-		fmt.Printf("%d. タイトル: %s, 公開日: %s\n", i+1, article.Title, article.PublishedAt)
+		fmt.Printf("%d. タイトル: %s, 公開日: %d\n", i+1, article.Title, article.PublishedAt)
 	}
 }

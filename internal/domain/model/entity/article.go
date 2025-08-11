@@ -2,6 +2,7 @@ package entity
 
 import (
 	"errors"
+	"time"
 
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value"
 )
@@ -9,8 +10,8 @@ import (
 type Article struct {
 	PK            string
 	Status        value.Status
-	CreatedAt     string
-	PublishedAt   string
+	CreatedAt     time.Time
+	PublishedAt   time.Time
 	PublishedYear string
 	Title         string
 	Contents      string
@@ -20,8 +21,8 @@ type Article struct {
 type NewArticleInput struct {
 	ID            string
 	Status        string
-	CreatedAt     string
-	PublishedAt   string
+	CreatedAt     time.Time
+	PublishedAt   time.Time
 	PublishedYear string
 	Title         string
 	Contents      string

@@ -56,10 +56,10 @@ func main() {
 
 	// 構造体でデータを準備
 	article := &dbmodel.Article{
-		PK:            "article#sample-003",
+		PK:            "article#sample-001",
 		Status:        "publish",
-		CreatedAt:     "2024-08-09T15:30:00Z",
-		PublishedAt:   "2024-08-10T10:00:00Z",
+		CreatedAt:     1691575800, // 2024-08-09T15:30:00Z
+		PublishedAt:   1691575800, // 2024-08-09T15:30:00Z
 		PublishedYear: "2024",
 		Title:         "サンプルタイトル",
 		Contents:      contents,

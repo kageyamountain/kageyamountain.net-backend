@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
@@ -65,7 +66,7 @@ func (a articleRepository) FindAllForList(ctx context.Context) ([]*entity.Articl
 		domainModel, err := entity.NewArticle(&entity.NewArticleInput{
 			ID:          dbModel.PK,
 			Status:      dbModel.Status,
-			PublishedAt: dbModel.PublishedAt,
+			PublishedAt: time.Unix(dbModel.PublishedAt, 0).UTC(),
 			Title:       dbModel.Title,
 			Tags:        dbModel.Tags,
 		})

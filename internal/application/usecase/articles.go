@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"time"
 
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/entity"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/repository"
@@ -27,7 +28,7 @@ type ArticlesGetUseCaseOutput struct {
 
 type ArticlesGetUseCaseOutputRow struct {
 	PK          string
-	PublishedAt string
+	PublishedAt time.Time
 	Title       string
 	Tags        []string
 }
