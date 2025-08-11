@@ -38,7 +38,7 @@ tasks:
     cmds:
       - go tool golangci-lint run --fix
 
-  # dynamodb local
+  # DynamoDB local
   table-create:
     desc: 開発用DynamoDBのテーブルを作成
     silent: true
@@ -70,3 +70,15 @@ tasks:
     silent: true
     cmds:
       - aws dynamodb list-tables --endpoint-url http://localhost:8000 --no-cli-pager
+
+  # OpenAPI
+  oapi-gen:
+    desc: OpenAPI定義書YAMLからGoコードを生成
+    silent: false
+    preconditions:
+      - test -f internal/presentation/openapi/api.yaml
+    cmds:
+      - rm -f internal/presentation/openapi/generate/*.gen.go
+      - go tool oapi-codegen -generate types -package openapi -o internal/presentation/openapi/generate/types.gen.go internal/presentation/openapi/api.yaml
+      - go tool oapi-codegen -generate gin -package openapi -o internal/presentation/openapi/generate/handler.gen.go internal/presentation/openapi/api.yaml
+      - go tool oapi-codegen -generate client -package openapi -o internal/presentation/openapi/generate/client.gen.go internal/presentation/openapi/api.yaml
