@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"log/slog"
 	"net/http"
 
@@ -24,19 +23,22 @@ func NewArticlesGetHandler(useCase usecase.ArticlesGetUseCase) *ArticlesGetHandl
 func (a *ArticlesGetHandler) ArticlesGet(c *gin.Context, params openapi.ArticlesGetParams) {
 	ctx := c.Request.Context()
 
+	// ユースケースの実行
 	useCaseOutput, err := a.useCase.Execute(ctx)
 	if err != nil {
-		slog.Error("failed to useCaseOutput use case", slog.Any("err", err))
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+		slog.Error("failed to ArticlesGet use case", slog.Any("err", err))
+		c.AbortWithStatusJSON(http.StatusInternalServerError, openapi.Error{
+			Code:    openapi.InternalServerError,
+			Message: "server error",
+		})
 		return
 	}
 
-	fmt.Println(useCaseOutput)
-
+	// レスポンスボディの型へ変換
 	var articles []openapi.Article
 	for _, article := range useCaseOutput.Articles {
 		articles = append(articles, openapi.Article{
-			Id:          article.PK,
+			Id:          article.ID,
 			PublishedAt: article.PublishedAt,
 			Title:       article.Title,
 			Tags:        article.Tags,

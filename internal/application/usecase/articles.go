@@ -27,7 +27,7 @@ type ArticlesGetUseCaseOutput struct {
 }
 
 type ArticlesGetUseCaseOutputRow struct {
-	PK          string
+	ID          string
 	PublishedAt time.Time
 	Title       string
 	Tags        []string
@@ -46,7 +46,7 @@ func (a *articlesGetUseCase) convertToOutput(articles []*entity.Article) *Articl
 	var output ArticlesGetUseCaseOutput
 	for _, article := range articles {
 		outputRow := &ArticlesGetUseCaseOutputRow{
-			PK:          article.PK,
+			ID:          article.ID,
 			PublishedAt: article.PublishedAt,
 			Title:       article.Title,
 			Tags:        make([]string, len(article.Tags)),

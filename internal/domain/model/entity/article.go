@@ -8,7 +8,7 @@ import (
 )
 
 type Article struct {
-	PK            string
+	ID            string
 	Status        value.Status
 	CreatedAt     time.Time
 	PublishedAt   time.Time
@@ -49,7 +49,7 @@ func NewArticle(input *NewArticleInput) (*Article, error) {
 	}
 
 	return &Article{
-		PK:            input.ID,
+		ID:            input.ID,
 		Status:        status,
 		CreatedAt:     input.CreatedAt,
 		PublishedAt:   input.PublishedAt,
