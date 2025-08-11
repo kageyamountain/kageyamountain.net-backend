@@ -15,9 +15,21 @@ func Logging() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now()
 
+		// RequestID取得
+		// クライアントから送信されていればそのまま利用、無ければ生成
+		requestID := c.GetHeader("X-Request-ID")
+		if requestID == "" {
+			requestID = uuid.New().String()
+		}
+
+		// レスポンスヘッダーにRequestIDをセット
+		c.Header("X-Request-ID", requestID)
+		c.Header("Access-Control-Expose-Headers", "X-Request-ID")
+
 		// ログMapの設定
 		logMap := &sync.Map{}
-		logMap.Store("request_id", uuid.New().String())
+		logMap.Store("log_type", logger.LogTypeApp)
+		logMap.Store("request_id", requestID)
 		logMap.Store("method", c.Request.Method)
 		logMap.Store("path", c.Request.URL.Path)
 
@@ -27,9 +39,14 @@ func Logging() gin.HandlerFunc {
 
 		c.Next()
 
+		// ログタイプをアクセスログへ変更
+		logMap.Store("log_type", logger.LogTypeAccess)
+		ctx = context.WithValue(c.Request.Context(), logger.ContextKeyLogMap, logMap)
+
 		// アクセスログを出力
 		duration := time.Since(start)
-		slog.InfoContext(ctx, "request started",
+		slog.InfoContext(ctx, "access log",
+			slog.String("request_id", requestID),
 			slog.String("host", c.Request.Host),
 			slog.String("uri", c.Request.URL.RequestURI()),
 			slog.Int("status", c.Writer.Status()),

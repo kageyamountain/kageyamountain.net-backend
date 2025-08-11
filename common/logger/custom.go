@@ -10,6 +10,13 @@ type contextKey string
 
 const ContextKeyLogMap contextKey = "logMap"
 
+type LogType string
+
+const (
+	LogTypeApp    LogType = "app_log"
+	LogTypeAccess LogType = "access_log"
+)
+
 // カスタムslog Handler: contextにセットされたログMap(sync.Map)から自動的にフィールドを追加する機能を持つ
 type AppLogHandler struct {
 	slog.Handler
