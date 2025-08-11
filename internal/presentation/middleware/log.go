@@ -11,20 +11,25 @@ import (
 	"github.com/kageyamountain/kageyamountain.net-backend/common/logger"
 )
 
+const (
+	HttpHeaderXRequestID                 = "X-Request-ID"
+	HttpHeaderAccessControlExposeHeaders = "Access-Control-Expose-Headers"
+)
+
 func Logging() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now()
 
 		// RequestID取得
 		// クライアントから送信されていればそのまま利用、無ければ生成
-		requestID := c.GetHeader("X-Request-ID")
+		requestID := c.GetHeader(HttpHeaderXRequestID)
 		if requestID == "" {
 			requestID = uuid.New().String()
 		}
 
 		// レスポンスヘッダーにRequestIDをセット
-		c.Header("X-Request-ID", requestID)
-		c.Header("Access-Control-Expose-Headers", "X-Request-ID")
+		c.Header(HttpHeaderXRequestID, requestID)
+		c.Header(HttpHeaderAccessControlExposeHeaders, HttpHeaderXRequestID)
 
 		// ログMapの設定
 		logMap := &sync.Map{}
