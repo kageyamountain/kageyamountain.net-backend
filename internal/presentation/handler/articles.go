@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/application/usecase"
+	openapi "github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi/generate"
 )
 
 type ArticlesGetHandler struct {
@@ -20,17 +21,29 @@ func NewArticlesGetHandler(useCase usecase.ArticlesGetUseCase) *ArticlesGetHandl
 }
 
 // GET /articles エンドポイント
-func (a *ArticlesGetHandler) Execute(c *gin.Context) {
+func (a *ArticlesGetHandler) ArticlesGet(c *gin.Context, params openapi.ArticlesGetParams) {
 	ctx := c.Request.Context()
 
-	articles, err := a.useCase.Execute(ctx)
+	useCaseOutput, err := a.useCase.Execute(ctx)
 	if err != nil {
-		slog.Error("failed to articles use case", slog.Any("err", err))
+		slog.Error("failed to useCaseOutput use case", slog.Any("err", err))
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
 		return
 	}
 
-	fmt.Println(articles)
+	fmt.Println(useCaseOutput)
 
-	c.JSON(http.StatusOK, gin.H{"body": "OK"})
+	var articles []openapi.Article
+	for _, article := range useCaseOutput.Articles {
+		articles = append(articles, openapi.Article{
+			Id:          article.PK,
+			PublishedAt: article.PublishedAt,
+			Title:       article.Title,
+			Tags:        article.Tags,
+		})
+	}
+
+	c.JSON(http.StatusOK, openapi.ArticlesGetResponseBody{
+		Articles: articles,
+	})
 }

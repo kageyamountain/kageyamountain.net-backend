@@ -10,10 +10,11 @@ import (
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/handler"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/middleware"
+	openapi "github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi/generate"
 )
 
 func Setup(ctx context.Context, appConfig *config.AppConfig) (*gin.Engine, error) {
-	articles, err := initializeHandler(ctx, appConfig)
+	siw, err := initializeHandler(ctx, appConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -21,13 +22,13 @@ func Setup(ctx context.Context, appConfig *config.AppConfig) (*gin.Engine, error
 	r := gin.Default()
 	r.Use(middleware.Logging())
 
-	r.GET("/articles", articles.Execute)                    // 一覧
-	r.GET("/articles/:article_id", func(c *gin.Context) {}) // 詳細
+	r.GET("/articles", siw.ArticlesGet)                     // 記事一覧
+	r.GET("/articles/:article_id", func(c *gin.Context) {}) // 記事詳細
 
 	return r, nil
 }
 
-func initializeHandler(ctx context.Context, appConfig *config.AppConfig) (*handler.ArticlesGetHandler, error) {
+func initializeHandler(ctx context.Context, appConfig *config.AppConfig) (*openapi.ServerInterfaceWrapper, error) {
 	// gateway
 	dynamoDB, err := gateway.NewDynamoDB(ctx, appConfig)
 	if err != nil {
@@ -41,7 +42,19 @@ func initializeHandler(ctx context.Context, appConfig *config.AppConfig) (*handl
 	articlesUsecase := usecase.NewArticlesUseCase(articleRepository)
 
 	// Handler
-	articlesHandler := handler.NewArticlesGetHandler(articlesUsecase)
+	articlesGetHandler := handler.NewArticlesGetHandler(articlesUsecase)
 
-	return articlesHandler, nil
+	// OpenAPI生成コードのHandlerのラッパーを作成
+	// middlewareはルーティング時にパス毎に個別に設定する
+	siw := &openapi.ServerInterfaceWrapper{
+		Handler: articlesGetHandler,
+		ErrorHandler: func(c *gin.Context, err error, statusCode int) {
+			c.AbortWithStatusJSON(statusCode, &openapi.Error{
+				Code:    openapi.InternalServerError,
+				Message: err.Error(),
+			})
+		},
+	}
+
+	return siw, nil
 }
