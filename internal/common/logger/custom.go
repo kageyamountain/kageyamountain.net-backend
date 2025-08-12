@@ -8,7 +8,7 @@ import (
 
 type contextKey string
 
-const ContextKeyLogMap contextKey = "logMap"
+const ContextKeyLogMap contextKey = "LogMap"
 
 type LogType string
 
