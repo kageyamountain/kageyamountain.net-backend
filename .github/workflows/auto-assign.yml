@@ -1,0 +1,33 @@
+# IssueとPull Requestの作成時に自動で作成者をアサインする
+name: Auto Assign
+
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  auto-assign:
+    # ボットが作成した Issue/PR はスキップ
+    if: contains(github.actor, '[bot]') == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Auto assign issue to creator
+        if: github.event_name == 'issues'
+        run: gh issue edit ${{ github.event.issue.number }} --add-assignee ${{ github.actor }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+
+      - name: Auto assign PR to creator
+        if: github.event_name == 'pull_request'
+        run: gh pr edit ${{ github.event.number }} --add-assignee ${{ github.actor }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
