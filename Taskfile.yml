@@ -10,7 +10,10 @@ tasks:
     env:
       ENV: dev
     cmds:
-      - go run cmd/api/main.go
+      - cmd: air
+        platforms: [linux, darwin]
+      - cmd: air -c .air.windows.toml
+        platforms: [ windows ]
 
   # docker
   compose-up:
