@@ -1,2 +1,6 @@
 # local DynamoDB data file
 /docker/dynamodb/shared-local-instance.db
+
+# Air関連
+tmp/
+build-errors.log

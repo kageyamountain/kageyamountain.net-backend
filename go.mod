@@ -3,6 +3,7 @@ module github.com/kageyamountain/kageyamountain.net-backend
 go 1.24.6
 
 tool (
+	github.com/air-verse/air
 	github.com/go-delve/delve/cmd/dlv
 	github.com/golangci/golangci-lint/v2/cmd/golangci-lint
 	github.com/joho/godotenv/cmd/godotenv
@@ -28,6 +29,7 @@ require (
 	4d63.com/gocheckcompilerdirectives v1.3.0 // indirect
 	4d63.com/gochecknoglobals v0.2.2 // indirect
 	codeberg.org/chavacava/garif v0.2.0 // indirect
+	dario.cat/mergo v1.0.2 // indirect
 	github.com/4meepo/tagalign v1.4.2 // indirect
 	github.com/Abirdcfly/dupword v0.1.6 // indirect
 	github.com/AlwxSin/noinlineerr v1.0.5 // indirect
@@ -39,6 +41,7 @@ require (
 	github.com/GaijinEntertainment/go-exhaustruct/v3 v3.3.1 // indirect
 	github.com/Masterminds/semver/v3 v3.3.1 // indirect
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.1 // indirect
+	github.com/air-verse/air v1.62.0 // indirect
 	github.com/alecthomas/chroma/v2 v2.19.0 // indirect
 	github.com/alecthomas/go-check-sumtype v0.3.1 // indirect
 	github.com/alexkohler/nakedret/v2 v2.0.6 // indirect
@@ -62,6 +65,8 @@ require (
 	github.com/aws/smithy-go v1.22.5 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
+	github.com/bep/godartsass/v2 v2.5.0 // indirect
+	github.com/bep/golibsass v1.2.0 // indirect
 	github.com/bkielbasa/cyclop v1.2.3 // indirect
 	github.com/blizzy78/varnamelen v0.8.0 // indirect
 	github.com/bombsimon/wsl/v4 v4.7.0 // indirect
@@ -87,6 +92,7 @@ require (
 	github.com/cloudwego/iasm v0.2.0 // indirect
 	github.com/cosiner/argv v0.1.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.6 // indirect
+	github.com/creack/pty v1.1.24 // indirect
 	github.com/curioswitch/go-reassign v0.3.0 // indirect
 	github.com/daixiang0/gci v0.13.7 // indirect
 	github.com/dave/dst v0.27.3 // indirect
@@ -99,7 +105,7 @@ require (
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/fatih/structtag v1.2.0 // indirect
 	github.com/firefart/nonamedreturns v1.0.6 // indirect
-	github.com/fsnotify/fsnotify v1.5.4 // indirect
+	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/fzipp/gocyclo v0.6.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/getkin/kin-openapi v0.132.0 // indirect
@@ -125,6 +131,7 @@ require (
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/gofrs/flock v0.12.1 // indirect
+	github.com/gohugoio/hugo v0.147.6 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/golangci/dupl v0.0.0-20250308024227-f665c8d69b32 // indirect
 	github.com/golangci/go-printf-func-name v0.1.0 // indirect
@@ -186,7 +193,7 @@ require (
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
 	github.com/mgechev/revive v1.11.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
-	github.com/mitchellh/mapstructure v1.5.0 // indirect
+	github.com/mitchellh/mapstructure v1.5.1-0.20231216201459-8508981c8b6c // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
@@ -231,7 +238,7 @@ require (
 	github.com/speakeasy-api/jsonpath v0.6.0 // indirect
 	github.com/speakeasy-api/openapi-overlay v0.10.2 // indirect
 	github.com/spf13/afero v1.14.0 // indirect
-	github.com/spf13/cast v1.5.0 // indirect
+	github.com/spf13/cast v1.8.0 // indirect
 	github.com/spf13/cobra v1.9.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.7 // indirect
@@ -242,6 +249,7 @@ require (
 	github.com/stretchr/testify v1.10.0 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
 	github.com/tdakkota/asciicheck v0.4.1 // indirect
+	github.com/tdewolff/parse/v2 v2.8.1 // indirect
 	github.com/tetafro/godot v1.5.1 // indirect
 	github.com/timakin/bodyclose v0.0.0-20241222091800-1db5c5ca4d67 // indirect
 	github.com/timonwong/loggercheck v0.11.0 // indirect
@@ -271,7 +279,7 @@ require (
 	go.uber.org/zap v1.24.0 // indirect
 	golang.org/x/arch v0.11.0 // indirect
 	golang.org/x/crypto v0.40.0 // indirect
-	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
+	golang.org/x/exp v0.0.0-20250531010427-b6e5de432a8b // indirect
 	golang.org/x/exp/typeparams v0.0.0-20250620022241-b7579e27df2b // indirect
 	golang.org/x/mod v0.26.0 // indirect
 	golang.org/x/net v0.42.0 // indirect
