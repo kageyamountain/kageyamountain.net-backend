@@ -23,7 +23,7 @@ issues:
   uniq-by-line: true
 
 linters:
-  default: none  # 全て無効にしてから個別にenableする
+  default: none  # 全て無効化してから個別に有効化する
   enable:
     - errcheck      # エラーハンドリング
     - govet         # go vet相当
