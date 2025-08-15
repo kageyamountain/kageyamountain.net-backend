@@ -2,30 +2,28 @@ package value
 
 import "fmt"
 
-type Status struct {
-	value string
+type Status string
+
+const (
+	StatusDraft   Status = "draft"
+	StatusPublish Status = "publish"
+)
+
+var validStatuses = map[Status]bool{
+	StatusDraft:   true,
+	StatusPublish: true,
 }
 
 func NewStatus(value string) (Status, error) {
 	// 有効な値かをチェック
-	_, exists := validStatuses[value]
-	if !exists {
-		return Status{}, fmt.Errorf("invalid status: %s", value)
+	status := Status(value)
+	if !validStatuses[status] {
+		return "", fmt.Errorf("invalid status: %s", value)
 	}
 
-	return Status{value: value}, nil
+	return status, nil
 }
 
 func (s Status) Value() string {
-	return s.value
-}
-
-const (
-	StatusDraft   = "draft"
-	StatusPublish = "publish"
-)
-
-var validStatuses = map[string]struct{}{
-	StatusDraft:   {},
-	StatusPublish: {},
+	return string(s)
 }

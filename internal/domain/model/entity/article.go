@@ -61,9 +61,9 @@ func NewArticle(input *NewArticleInput) (*Article, error) {
 }
 
 func (a *Article) IsDraft() bool {
-	return a.Status.Value() == value.StatusDraft
+	return a.Status == value.StatusDraft
 }
 
 func (a *Article) IsPublish() bool {
-	return a.Status.Value() == value.StatusPublish
+	return a.Status == value.StatusPublish
 }

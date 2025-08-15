@@ -2,42 +2,40 @@ package value
 
 import "fmt"
 
-type Tag struct {
-	value string
+type Tag string
+
+const (
+	TagGo  Tag = "Go"
+	TagGin Tag = "Gin"
+
+	TagJavaScript Tag = "JavaScript"
+	TagTypeScript Tag = "TypeScript"
+	TagVueJS      Tag = "Vue.js"
+
+	TagAWS      Tag = "AWS"
+	TagDynamoDB Tag = "DynamoDB"
+)
+
+var validTags = map[Tag]bool{
+	TagGo:         true,
+	TagGin:        true,
+	TagJavaScript: true,
+	TagTypeScript: true,
+	TagVueJS:      true,
+	TagAWS:        true,
+	TagDynamoDB:   true,
 }
 
 func NewTag(value string) (Tag, error) {
 	// 有効な値かをチェック
-	_, exists := validTags[value]
-	if !exists {
-		return Tag{}, fmt.Errorf("invalid tag: %s", value)
+	tag := Tag(value)
+	if !validTags[tag] {
+		return "", fmt.Errorf("invalid tag: %s", value)
 	}
 
-	return Tag{value: value}, nil
+	return tag, nil
 }
 
 func (t Tag) Value() string {
-	return t.value
-}
-
-const (
-	TagGo  = "Go"
-	TagGin = "Gin"
-
-	TagJavaScript = "JavaScript"
-	TagTypeScript = "TypeScript"
-	TagVueJS      = "Vue.js"
-
-	TagAWS      = "AWS"
-	TagDynamoDB = "DynamoDB"
-)
-
-var validTags = map[string]struct{}{
-	TagGo:         {},
-	TagGin:        {},
-	TagJavaScript: {},
-	TagTypeScript: {},
-	TagVueJS:      {},
-	TagAWS:        {},
-	TagDynamoDB:   {},
+	return string(t)
 }
