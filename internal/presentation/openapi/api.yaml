@@ -67,10 +67,10 @@ paths:
         - name: article-id
           in: path
           required: true
-          description: 記事ID（UUID形式）
+          description: 記事ID（ハイフン無しのUUIDv4形式）
           schema:
             type: string
-          example: "123e4567-e89b-12d3-a456-426655440000"
+          example: "123e4567e89b12d3a456426655440000"
       responses:
         '200':
           description: 成功
@@ -110,7 +110,7 @@ components:
   schemas:
     RequestID:
       type: string
-      description: リクエストID（UUID形式）
+      description: リクエストID（UUIDv4形式）
       example: "123e4567-e89b-12d3-a456-426614174000"
 
     ArticlesGetResponseBody:
@@ -133,8 +133,8 @@ components:
       properties:
         id:
           type: string
-          description: 記事ID（UUID形式）
-          example: "123e4567-e89b-12d3-a456-426655440000"
+          description: 記事ID（ハイフン無しのUUIDv4形式）
+          example: "123e4567e89b12d3a456426655440000"
         published_at:
           type: string
           format: date-time

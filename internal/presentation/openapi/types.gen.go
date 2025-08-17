@@ -18,7 +18,7 @@ type Article struct {
 	// Contents 記事内容（マークダウン形式）
 	Contents *string `json:"contents,omitempty"`
 
-	// Id 記事ID（UUID形式）
+	// Id 記事ID（ハイフン無しのUUIDv4形式）
 	Id string `json:"id"`
 
 	// PublishedAt 公開日時（UTC）
@@ -51,7 +51,7 @@ type Error struct {
 // ErrorCode エラーコード
 type ErrorCode string
 
-// RequestID リクエストID（UUID形式）
+// RequestID リクエストID（UUIDv4形式）
 type RequestID = string
 
 // ArticlesGetParams defines parameters for ArticlesGet.
