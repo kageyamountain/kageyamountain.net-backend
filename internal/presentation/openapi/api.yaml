@@ -55,13 +55,64 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /articles/{article-id}:
+    servers: *servers
+    get:
+      summary: 記事情報取得API
+      description: 記事IDを指定して単一記事の詳細情報を取得する
+      operationId: articleGet
+      tags:
+        - article
+      parameters:
+        - name: article-id
+          in: path
+          required: true
+          description: 記事ID（UUID形式）
+          schema:
+            type: string
+          example: "123e4567-e89b-12d3-a456-426655440000"
+      responses:
+        '200':
+          description: 成功
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '404':
+          description: 指定IDの記事が存在しない場合
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: サーバーエラー
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   headers:
     RequestID:
       description: リクエストID
       schema:
         $ref: '#/components/schemas/RequestID'
+
   schemas:
+    RequestID:
+      type: string
+      description: リクエストID（UUID形式）
+      example: "123e4567-e89b-12d3-a456-426614174000"
+
     ArticlesGetResponseBody:
       type: object
       required:
@@ -71,11 +122,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Article'
-
-    RequestID:
-      type: string
-      description: リクエストID（UUID形式）
-      example: "123e4567-e89b-12d3-a456-426614174000"
 
     Article:
       type: object
@@ -98,10 +144,20 @@ components:
           type: string
           description: 記事タイトル
           example: "Go言語入門"
+        contents:
+          type: string
+          description: 記事内容（マークダウン形式）
+          example: |
+            # 入門チャプター
+            - 標準出力
+            - 変数と定数
+            - 条件分岐
+            - ループ
         tags:
           type: array
           items:
             type: string
+          description: タグ
           example: ["Go", "JavaScript", "AWS"]
 
     Error:
@@ -133,3 +189,4 @@ components:
       type: string
       enum:
         - internal_server_error
+        - not_found
