@@ -28,13 +28,13 @@ func NewArticleRepository(dynamoDB *gateway.DynamoDB) repository.ArticleReposito
 
 func (a articleRepository) FindAllForList(ctx context.Context) ([]*entity.Article, error) {
 	// データ取得仕様の定義
-	keyCondition := expression.Key(constant.AttributeStatus).Equal(expression.Value("publish"))
+	keyCondition := expression.Key(constant.Article.Attribute.Status).Equal(expression.Value("publish"))
 	projection := expression.NamesList(
-		expression.Name(constant.AttributePK),
-		expression.Name(constant.AttributeStatus),
-		expression.Name(constant.AttributePublishedAt),
-		expression.Name(constant.AttributeTitle),
-		expression.Name(constant.AttributeTags),
+		expression.Name(constant.Article.Attribute.PK),
+		expression.Name(constant.Article.Attribute.Status),
+		expression.Name(constant.Article.Attribute.PublishedAt),
+		expression.Name(constant.Article.Attribute.Title),
+		expression.Name(constant.Article.Attribute.Tags),
 	)
 	exp, err := expression.NewBuilder().WithKeyCondition(keyCondition).WithProjection(projection).Build()
 	if err != nil {
@@ -43,8 +43,8 @@ func (a articleRepository) FindAllForList(ctx context.Context) ([]*entity.Articl
 
 	// データ取得
 	result, err := a.dynamoDB.Client().Query(ctx, &dynamodb.QueryInput{
-		TableName:                 aws.String(constant.TableArticle),
-		IndexName:                 aws.String(constant.GSIPublishedArticleIndex), // GSIを指定
+		TableName:                 aws.String(constant.Article.TableName),
+		IndexName:                 aws.String(constant.Article.GSI.PublishedArticleIndex),
 		KeyConditionExpression:    exp.KeyCondition(),
 		ProjectionExpression:      exp.Projection(),
 		ExpressionAttributeNames:  exp.Names(),
@@ -85,9 +85,9 @@ func (a articleRepository) FindAllForList(ctx context.Context) ([]*entity.Articl
 func (a articleRepository) FindByID(ctx context.Context, articleID string) (*entity.Article, error) {
 	// データ取得
 	result, err := a.dynamoDB.Client().GetItem(ctx, &dynamodb.GetItemInput{
-		TableName: aws.String(constant.TableArticle),
+		TableName: aws.String(constant.Article.TableName),
 		Key: map[string]types.AttributeValue{
-			constant.AttributePK: &types.AttributeValueMemberS{
+			constant.Article.PartitionKey: &types.AttributeValueMemberS{
 				Value: articleID,
 			},
 		},
