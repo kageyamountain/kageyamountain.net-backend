@@ -90,10 +90,25 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 type ClientInterface interface {
 	// ArticlesGet request
 	ArticlesGet(ctx context.Context, params *ArticlesGetParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ArticleGet request
+	ArticleGet(ctx context.Context, articleId string, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
 func (c *Client) ArticlesGet(ctx context.Context, params *ArticlesGetParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewArticlesGetRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ArticleGet(ctx context.Context, articleId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewArticleGetRequest(c.Server, articleId)
 	if err != nil {
 		return nil, err
 	}
@@ -169,6 +184,40 @@ func NewArticlesGetRequest(server string, params *ArticlesGetParams) (*http.Requ
 	return req, nil
 }
 
+// NewArticleGetRequest generates requests for ArticleGet
+func NewArticleGetRequest(server string, articleId string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "article-id", runtime.ParamLocationPath, articleId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/articles/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 func (c *Client) applyEditors(ctx context.Context, req *http.Request, additionalEditors []RequestEditorFn) error {
 	for _, r := range c.RequestEditors {
 		if err := r(ctx, req); err != nil {
@@ -214,6 +263,9 @@ func WithBaseURL(baseURL string) ClientOption {
 type ClientWithResponsesInterface interface {
 	// ArticlesGetWithResponse request
 	ArticlesGetWithResponse(ctx context.Context, params *ArticlesGetParams, reqEditors ...RequestEditorFn) (*ArticlesGetResponse, error)
+
+	// ArticleGetWithResponse request
+	ArticleGetWithResponse(ctx context.Context, articleId string, reqEditors ...RequestEditorFn) (*ArticleGetResponse, error)
 }
 
 type ArticlesGetResponse struct {
@@ -239,6 +291,30 @@ func (r ArticlesGetResponse) StatusCode() int {
 	return 0
 }
 
+type ArticleGetResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Article
+	JSON404      *Error
+	JSON500      *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r ArticleGetResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ArticleGetResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 // ArticlesGetWithResponse request returning *ArticlesGetResponse
 func (c *ClientWithResponses) ArticlesGetWithResponse(ctx context.Context, params *ArticlesGetParams, reqEditors ...RequestEditorFn) (*ArticlesGetResponse, error) {
 	rsp, err := c.ArticlesGet(ctx, params, reqEditors...)
@@ -246,6 +322,15 @@ func (c *ClientWithResponses) ArticlesGetWithResponse(ctx context.Context, param
 		return nil, err
 	}
 	return ParseArticlesGetResponse(rsp)
+}
+
+// ArticleGetWithResponse request returning *ArticleGetResponse
+func (c *ClientWithResponses) ArticleGetWithResponse(ctx context.Context, articleId string, reqEditors ...RequestEditorFn) (*ArticleGetResponse, error) {
+	rsp, err := c.ArticleGet(ctx, articleId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseArticleGetResponse(rsp)
 }
 
 // ParseArticlesGetResponse parses an HTTP response from a ArticlesGetWithResponse call
@@ -268,6 +353,46 @@ func ParseArticlesGetResponse(rsp *http.Response) (*ArticlesGetResponse, error) 
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseArticleGetResponse parses an HTTP response from a ArticleGetWithResponse call
+func ParseArticleGetResponse(rsp *http.Response) (*ArticleGetResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ArticleGetResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Article
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest Error

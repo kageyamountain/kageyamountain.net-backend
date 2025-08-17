@@ -8,4 +8,5 @@ import (
 
 type ArticleRepository interface {
 	FindAllForList(ctx context.Context) ([]*entity.Article, error)
+	FindByID(ctx context.Context, articleID string) (*entity.Article, error)
 }

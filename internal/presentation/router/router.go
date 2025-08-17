@@ -22,8 +22,8 @@ func Setup(ctx context.Context, appConfig *config.AppConfig) (*gin.Engine, error
 	r := gin.Default()
 	r.Use(middleware.Logging())
 
-	r.GET("/articles", siw.ArticlesGet)                     // 記事一覧
-	r.GET("/articles/:article_id", func(c *gin.Context) {}) // 記事詳細
+	r.GET("/articles", siw.ArticlesGet)            // 記事一覧
+	r.GET("/articles/:article-id", siw.ArticleGet) // 記事詳細
 
 	return r, nil
 }
@@ -40,14 +40,19 @@ func initializeHandler(ctx context.Context, appConfig *config.AppConfig) (*opena
 
 	// UseCase
 	articlesUsecase := usecase.NewArticlesUseCase(articleRepository)
+	articleUsecase := usecase.NewArticleUseCase(articleRepository)
 
 	// Handler
 	articlesGetHandler := handler.NewArticlesGetHandler(articlesUsecase)
+	articleGetHandler := handler.NewArticleGetHandler(articleUsecase)
+
+	// OpenAPI生成コードのServerInterfaceを実装するHandlerを作成
+	sih := NewServerInterfaceHandler(articlesGetHandler, articleGetHandler)
 
 	// OpenAPI生成コードのHandlerのラッパーを作成
 	// middlewareはルーティング時にパス毎に個別に設定する
 	siw := &openapi.ServerInterfaceWrapper{
-		Handler: articlesGetHandler,
+		Handler: sih,
 		ErrorHandler: func(c *gin.Context, err error, statusCode int) {
 			c.AbortWithStatusJSON(statusCode, &openapi.Error{
 				Code:    openapi.InternalServerError,

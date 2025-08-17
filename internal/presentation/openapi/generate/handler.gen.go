@@ -16,6 +16,9 @@ type ServerInterface interface {
 	// 記事一覧情報取得API
 	// (GET /articles)
 	ArticlesGet(c *gin.Context, params ArticlesGetParams)
+	// 記事情報取得API
+	// (GET /articles/{article-id})
+	ArticleGet(c *gin.Context, articleId string)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -61,6 +64,30 @@ func (siw *ServerInterfaceWrapper) ArticlesGet(c *gin.Context) {
 	siw.Handler.ArticlesGet(c, params)
 }
 
+// ArticleGet operation middleware
+func (siw *ServerInterfaceWrapper) ArticleGet(c *gin.Context) {
+
+	var err error
+
+	// ------------- Path parameter "article-id" -------------
+	var articleId string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "article-id", c.Param("article-id"), &articleId, runtime.BindStyledParameterOptions{Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter article-id: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.ArticleGet(c, articleId)
+}
+
 // GinServerOptions provides options for the Gin server.
 type GinServerOptions struct {
 	BaseURL      string
@@ -89,4 +116,5 @@ func RegisterHandlersWithOptions(router gin.IRouter, si ServerInterface, options
 	}
 
 	router.GET(options.BaseURL+"/articles", wrapper.ArticlesGet)
+	router.GET(options.BaseURL+"/articles/:article-id", wrapper.ArticleGet)
 }

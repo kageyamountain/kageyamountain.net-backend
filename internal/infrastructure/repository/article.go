@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/entity"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/repository"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/gateway"
@@ -78,4 +79,46 @@ func (a articleRepository) FindAllForList(ctx context.Context) ([]*entity.Articl
 	}
 
 	return domainModels, nil
+}
+
+func (a articleRepository) FindByID(ctx context.Context, articleID string) (*entity.Article, error) {
+	// データ取得
+	result, err := a.dynamoDB.Client().GetItem(ctx, &dynamodb.GetItemInput{
+		TableName: aws.String("article"),
+		Key: map[string]types.AttributeValue{
+			"pk": &types.AttributeValueMemberS{
+				Value: articleID,
+			},
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	// 指定ID記事の存在チェック
+	if result.Item == nil {
+		return nil, nil
+	}
+
+	// DBModelにマッピング
+	var dbModel dbmodel.Article
+	err = attributevalue.UnmarshalMap(result.Item, &dbModel)
+	if err != nil {
+		return nil, err
+	}
+
+	// DomainModelに変換
+	domainModel, err := entity.NewArticle(&entity.NewArticleInput{
+		ID:          dbModel.PK,
+		Status:      dbModel.Status,
+		PublishedAt: time.Unix(dbModel.PublishedAt, 0).UTC(),
+		Title:       dbModel.Title,
+		Contents:    dbModel.Contents,
+		Tags:        dbModel.Tags,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return domainModel, nil
 }

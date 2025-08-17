@@ -10,16 +10,22 @@ import (
 // Defines values for ErrorCode.
 const (
 	InternalServerError ErrorCode = "internal_server_error"
+	NotFound            ErrorCode = "not_found"
 )
 
 // Article defines model for Article.
 type Article struct {
+	// Contents 記事内容（マークダウン形式）
+	Contents *string `json:"contents,omitempty"`
+
 	// Id 記事ID（UUID形式）
 	Id string `json:"id"`
 
-	// PublishedAt 公開日時
+	// PublishedAt 公開日時（UTC）
 	PublishedAt time.Time `json:"published_at"`
-	Tags        []string  `json:"tags"`
+
+	// Tags タグ
+	Tags []string `json:"tags"`
 
 	// Title 記事タイトル
 	Title string `json:"title"`
