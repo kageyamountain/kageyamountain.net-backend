@@ -47,7 +47,7 @@ func initializeHandler(ctx context.Context, appConfig *config.AppConfig) (*opena
 	articleGetHandler := handler.NewArticleGetHandler(articleUsecase)
 
 	// OpenAPI生成コードのServerInterfaceを実装するHandlerを作成
-	handler := NewServerInterfaceHandler(articlesGetHandler, articleGetHandler)
+	sih := NewServerInterfaceHandler(articlesGetHandler, articleGetHandler)
 
 	// OpenAPI生成コードのHandlerのラッパーを作成
 	// middlewareはルーティング時にパス毎に個別に設定する
