@@ -47,7 +47,7 @@ func main() {
 	})
 
 	// 取得したい記事のPKを指定
-	targetPK := "article#sample-001"
+	targetPK := "f7e8c2a1-4b9d-4c3e-8f2a-1d5e6b7c8a9f"
 
 	// GetItem実行
 	result, err := client.GetItem(context.TODO(), &dynamodb.GetItemInput{

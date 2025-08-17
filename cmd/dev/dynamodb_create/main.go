@@ -56,7 +56,7 @@ func main() {
 
 	// 構造体でデータを準備
 	article := &dbmodel.Article{
-		PK:            "article#sample-001",
+		PK:            "f7e8c2a1-4b9d-4c3e-8f2a-1d5e6b7c8a9f",
 		Status:        "publish",
 		CreatedAt:     1691575800, // 2024-08-09T15:30:00Z
 		PublishedAt:   1691575800, // 2024-08-09T15:30:00Z
