@@ -10,7 +10,7 @@ import (
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/handler"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/middleware"
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi/generate"
+	openapi "github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi/generate"
 )
 
 func Setup(ctx context.Context, appConfig *config.AppConfig) (*gin.Engine, error) {
@@ -28,7 +28,7 @@ func Setup(ctx context.Context, appConfig *config.AppConfig) (*gin.Engine, error
 	return r, nil
 }
 
-func initializeHandler(ctx context.Context, appConfig *config.AppConfig) (*generate.ServerInterfaceWrapper, error) {
+func initializeHandler(ctx context.Context, appConfig *config.AppConfig) (*openapi.ServerInterfaceWrapper, error) {
 	// gateway
 	dynamoDB, err := gateway.NewDynamoDB(ctx, appConfig)
 	if err != nil {
@@ -51,11 +51,11 @@ func initializeHandler(ctx context.Context, appConfig *config.AppConfig) (*gener
 
 	// OpenAPI生成コードのHandlerのラッパーを作成
 	// middlewareはルーティング時にパス毎に個別に設定する
-	siw := &generate.ServerInterfaceWrapper{
-		Handler: handler,
+	siw := &openapi.ServerInterfaceWrapper{
+		Handler: sih,
 		ErrorHandler: func(c *gin.Context, err error, statusCode int) {
-			c.AbortWithStatusJSON(statusCode, &generate.Error{
-				Code:    generate.InternalServerError,
+			c.AbortWithStatusJSON(statusCode, &openapi.Error{
+				Code:    openapi.InternalServerError,
 				Message: err.Error(),
 			})
 		},
