@@ -10,7 +10,7 @@ import (
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/handler"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/middleware"
-	openapi "github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi/generate"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi"
 )
 
 func Setup(ctx context.Context, appConfig *config.AppConfig) (*gin.Engine, error) {

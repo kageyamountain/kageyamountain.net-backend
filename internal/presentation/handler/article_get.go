@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/application/usecase"
-	openapi "github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi/generate"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi"
 )
 
 type ArticleGetHandler struct {

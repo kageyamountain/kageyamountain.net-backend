@@ -81,7 +81,7 @@ tasks:
     preconditions:
       - test -f internal/presentation/openapi/api.yaml
     cmds:
-      - rm -f internal/presentation/openapi/generate/*.gen.go
-      - go tool oapi-codegen -generate types -package openapi -o internal/presentation/openapi/generate/types.gen.go internal/presentation/openapi/api.yaml
-      - go tool oapi-codegen -generate gin -package openapi -o internal/presentation/openapi/generate/handler.gen.go internal/presentation/openapi/api.yaml
-      - go tool oapi-codegen -generate client -package openapi -o internal/presentation/openapi/generate/client.gen.go internal/presentation/openapi/api.yaml
+      - rm -f internal/presentation/openapi/*.gen.go
+      - go tool oapi-codegen -generate types -package openapi -o internal/presentation/openapi/types.gen.go internal/presentation/openapi/api.yaml
+      - go tool oapi-codegen -generate gin -package openapi -o internal/presentation/openapi/handler.gen.go internal/presentation/openapi/api.yaml
+      - go tool oapi-codegen -generate client -package openapi -o internal/presentation/openapi/client.gen.go internal/presentation/openapi/api.yaml
