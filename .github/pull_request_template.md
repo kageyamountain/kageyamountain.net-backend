@@ -1,5 +1,5 @@
-## issue
-あれば記載
+# issue
+<!-- Link to related issue -->
 
-## overview
-あれば記載
+# overview
+<!-- Describe what this PR does -->
