@@ -46,7 +46,7 @@ func (a *articlesGetUseCase) convertToOutput(articles []*entity.Article) *Articl
 	var output ArticlesGetUseCaseOutput
 	for _, article := range articles {
 		outputRow := &ArticlesGetUseCaseOutputRow{
-			ID:          article.ID,
+			ID:          article.ID.Value(),
 			PublishedAt: article.PublishedAt,
 			Title:       article.Title,
 			Tags:        make([]string, len(article.Tags)),

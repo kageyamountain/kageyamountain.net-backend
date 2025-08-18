@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/entity"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/repository"
 )
 
@@ -30,7 +31,13 @@ type ArticleGetUseCaseOutput struct {
 	Tags        []string
 }
 
-func (a *articleGetUseCase) Execute(ctx context.Context, articleID string) (*ArticleGetUseCaseOutput, error) {
+func (a *articleGetUseCase) Execute(ctx context.Context, inputArticleID string) (*ArticleGetUseCaseOutput, error) {
+	// Value Objectへの変換
+	articleID, err := value.NewArticleID(inputArticleID)
+	if err != nil {
+		return nil, err
+	}
+
 	articleEntity, err := a.articleRepository.FindByID(ctx, articleID)
 	if err != nil {
 		return nil, err
@@ -51,7 +58,7 @@ func (a *articleGetUseCase) Execute(ctx context.Context, articleID string) (*Art
 
 func (a *articleGetUseCase) convertToOutput(article *entity.Article) *ArticleGetUseCaseOutput {
 	output := &ArticleGetUseCaseOutput{
-		ID:          article.ID,
+		ID:          article.ID.Value(),
 		PublishedAt: article.PublishedAt,
 		Title:       article.Title,
 		Contents:    article.Contents,

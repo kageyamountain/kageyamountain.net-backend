@@ -4,11 +4,12 @@ import (
 	"errors"
 	"time"
 
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value/enum"
 )
 
 type Article struct {
-	ID            string
+	ID            value.ArticleID
 	Status        enum.Status
 	CreatedAt     time.Time
 	PublishedAt   time.Time
@@ -31,7 +32,12 @@ type NewArticleInput struct {
 
 func NewArticle(input *NewArticleInput) (*Article, error) {
 	if input.ID == "" {
-		return nil, errors.New("partition key is required")
+		return nil, errors.New("id is required")
+	}
+
+	articleID, err := value.NewArticleID(input.ID)
+	if err != nil {
+		return nil, err
 	}
 
 	status, err := enum.NewStatus(input.Status)
@@ -49,7 +55,7 @@ func NewArticle(input *NewArticleInput) (*Article, error) {
 	}
 
 	return &Article{
-		ID:            input.ID,
+		ID:            *articleID,
 		Status:        status,
 		CreatedAt:     input.CreatedAt,
 		PublishedAt:   input.PublishedAt,

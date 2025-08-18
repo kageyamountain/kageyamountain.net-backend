@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/entity"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/repository"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/gateway"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository/constant"
@@ -82,13 +83,13 @@ func (a articleRepository) FindAllForList(ctx context.Context) ([]*entity.Articl
 	return domainModels, nil
 }
 
-func (a articleRepository) FindByID(ctx context.Context, articleID string) (*entity.Article, error) {
+func (a articleRepository) FindByID(ctx context.Context, articleID *value.ArticleID) (*entity.Article, error) {
 	// データ取得
 	result, err := a.dynamoDB.Client().GetItem(ctx, &dynamodb.GetItemInput{
 		TableName: aws.String(constant.Article.TableName),
 		Key: map[string]types.AttributeValue{
 			constant.Article.PartitionKey: &types.AttributeValueMemberS{
-				Value: articleID,
+				Value: articleID.Value(),
 			},
 		},
 	})
