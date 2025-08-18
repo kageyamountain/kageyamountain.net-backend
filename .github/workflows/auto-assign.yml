@@ -1,5 +1,5 @@
 # IssueとPull Requestの作成時に自動で作成者をアサインする
-name: Auto Assign
+name: auto-assign
 
 on:
   issues:
