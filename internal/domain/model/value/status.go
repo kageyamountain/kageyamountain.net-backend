@@ -24,6 +24,6 @@ func NewStatus(value string) (Status, error) {
 	return status, nil
 }
 
-func (s Status) Value() string {
+func (s Status) String() string {
 	return string(s)
 }

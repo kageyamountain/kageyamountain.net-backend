@@ -36,6 +36,6 @@ func NewTag(value string) (Tag, error) {
 	return tag, nil
 }
 
-func (t Tag) Value() string {
+func (t Tag) String() string {
 	return string(t)
 }

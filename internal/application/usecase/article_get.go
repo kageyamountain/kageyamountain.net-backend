@@ -59,7 +59,7 @@ func (a *articleGetUseCase) convertToOutput(article *entity.Article) *ArticleGet
 	}
 
 	for i, tag := range article.Tags {
-		output.Tags[i] = tag.Value()
+		output.Tags[i] = tag.String()
 	}
 
 	return output

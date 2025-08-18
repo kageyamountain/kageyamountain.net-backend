@@ -63,7 +63,7 @@ func main() {
 		PublishedYear: "2024",
 		Title:         "サンプルタイトル",
 		Contents:      contents,
-		Tags:          []string{value.TagGo.Value(), value.TagGin.Value(), value.TagAWS.Value(), value.TagDynamoDB.Value()},
+		Tags:          []string{value.TagGo.String(), value.TagGin.String(), value.TagAWS.String(), value.TagDynamoDB.String()},
 	}
 
 	// 構造体をDynamoDB AttributeValue形式に変換

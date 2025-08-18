@@ -52,7 +52,7 @@ func (a *articlesGetUseCase) convertToOutput(articles []*entity.Article) *Articl
 			Tags:        make([]string, len(article.Tags)),
 		}
 		for i, tag := range article.Tags {
-			outputRow.Tags[i] = tag.Value()
+			outputRow.Tags[i] = tag.String()
 		}
 		output.Articles = append(output.Articles, outputRow)
 	}
