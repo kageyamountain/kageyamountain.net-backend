@@ -13,7 +13,8 @@ jobs:
     name: テスト実行
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: リポジトリのチェックアウト
+        uses: actions/checkout@v4
 
       - name: Goのセットアップ
         uses: actions/setup-go@v5
@@ -26,4 +27,3 @@ jobs:
 
       - name: テスト実行
         run: go test -v ./...
-        
