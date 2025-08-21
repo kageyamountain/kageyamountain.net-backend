@@ -1,0 +1,29 @@
+name: test
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test:
+    name: テスト実行
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Goのセットアップ
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: ./go.mod
+          cache: true
+
+      - name: 依存関係のダウンロード
+        run: go mod download
+
+      - name: テスト実行
+        run: go test -v ./...
+        

@@ -28,6 +28,19 @@ tasks:
     cmds:
       - docker compose down
 
+  # test
+  test:
+    desc: テスト実行（失敗テストのみ表示）
+    silent: true
+    cmds:
+      - go test -cover -race ./...
+
+  test-display-all:
+    desc: テスト実行（全テスト結果表示）
+    silent: true
+    cmds:
+      - go test -v -cover -race ./...
+
   # lint
   lint:
     desc: lint実行
@@ -40,6 +53,13 @@ tasks:
     silent: true
     cmds:
       - go tool golangci-lint run --fix
+
+  # fmt
+  fmt:
+    desc: go fmt実行
+    silent: true
+    cmds:
+      - go fmt ./...
 
   # DynamoDB local
   table-create:
