@@ -54,6 +54,13 @@ tasks:
     cmds:
       - go tool golangci-lint run --fix
 
+  # fmt
+  fmt:
+    desc: go fmt実行
+    silent: true
+    cmds:
+      - go fmt ./...
+
   # DynamoDB local
   table-create:
     desc: 開発用DynamoDBのテーブルを作成
