@@ -40,14 +40,14 @@ func NewArticle(input *NewArticleInput) (*Article, error) {
 		return nil, err
 	}
 
-	status, err := enum.NewStatus(input.Status)
+	status, err := enum.ParseStatus(input.Status)
 	if err != nil {
 		return nil, err
 	}
 
 	var tags []enum.Tag
 	for _, tag := range input.Tags {
-		t, err := enum.NewTag(tag)
+		t, err := enum.ParseTag(tag)
 		if err != nil {
 			return nil, err
 		}

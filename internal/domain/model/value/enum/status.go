@@ -14,7 +14,7 @@ var validStatuses = map[Status]bool{
 	StatusPublish: true,
 }
 
-func NewStatus(value string) (Status, error) {
+func ParseStatus(value string) (Status, error) {
 	// 有効な値かをチェック
 	status := Status(value)
 	if !validStatuses[status] {
