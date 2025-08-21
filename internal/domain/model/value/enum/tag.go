@@ -26,7 +26,7 @@ var validTags = map[Tag]bool{
 	TagDynamoDB:   true,
 }
 
-func NewTag(value string) (Tag, error) {
+func ParseTag(value string) (Tag, error) {
 	// 有効な値かをチェック
 	tag := Tag(value)
 	if !validTags[tag] {
