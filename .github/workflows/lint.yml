@@ -10,7 +10,7 @@ on:
 
 jobs:
   golangci:
-    name: lint実行
+    name: lint
     runs-on: ubuntu-latest
     steps:
       - name: リポジトリのチェックアウト
