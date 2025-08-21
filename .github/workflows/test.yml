@@ -10,7 +10,7 @@ on:
 
 jobs:
   test:
-    name: テスト実行
+    name: test
     runs-on: ubuntu-latest
     steps:
       - name: リポジトリのチェックアウト
