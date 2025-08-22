@@ -27,6 +27,15 @@ func NewArticleID(value string) (*ArticleID, error) {
 	}, nil
 }
 
+func GenerateArticleID() *ArticleID {
+	uuidWithHyphen := uuid.New().String()
+	value := strings.ReplaceAll(uuidWithHyphen, "-", "")
+
+	return &ArticleID{
+		value: value,
+	}
+}
+
 func (a *ArticleID) Value() string {
 	return a.value
 }

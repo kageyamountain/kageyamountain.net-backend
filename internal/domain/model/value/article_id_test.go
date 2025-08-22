@@ -1,6 +1,7 @@
 package value
 
 import (
+	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -25,7 +26,6 @@ func TestNewArticleID(t *testing.T) {
 				// Arrange
 
 				// Act
-				got, err := NewArticleID(tt.input)
 
 				// Assert
 				a := assert.New(t)
@@ -63,5 +63,48 @@ func TestNewArticleID(t *testing.T) {
 				a.Nil(got)
 			})
 		}
+	})
+}
+
+func TestGenerateArticleID(t *testing.T) {
+	t.Parallel()
+
+	t.Run("正常系", func(t *testing.T) {
+		t.Run("生成されたIDは32文字の小文字16進数でハイフン無し", func(t *testing.T) {
+			t.Parallel()
+			// Arrange
+
+			// Act
+			gotArticleID := GenerateArticleID()
+
+			// Assert
+			a := assert.New(t)
+			a.NotNil(gotArticleID)
+			a.Len(gotArticleID.Value(), 32)
+			a.NotContains(gotArticleID.Value(), "-")
+			a.Regexp(regexp.MustCompile(`^[0-9a-f]{32}$`), gotArticleID.Value())
+		})
+
+		t.Run("100回連続生成して重複しない", func(t *testing.T) {
+			t.Parallel()
+			// Arrange
+			ids := make(map[string]int)
+			exists := false
+
+			// Act
+			for i := 0; i < 100; i++ {
+				id := GenerateArticleID().Value()
+				_, exists = ids[id]
+				if exists {
+					break
+				}
+				ids[id] = i
+			}
+
+			// Assert
+			a := assert.New(t)
+			a.False(exists)
+			a.Len(ids, 100)
+		})
 	})
 }
