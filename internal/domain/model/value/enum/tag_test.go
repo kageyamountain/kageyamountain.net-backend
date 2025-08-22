@@ -32,12 +32,12 @@ func TestParseTag(t *testing.T) {
 				// Arrange
 
 				// Act
-				got, err := ParseTag(tt.input)
+				gotTag, err := ParseTag(tt.input)
 
 				// Assert
 				a := assert.New(t)
 				a.NoError(err)
-				a.Equal(tt.wantTag, got)
+				a.Equal(tt.wantTag, gotTag)
 			})
 		}
 	})
@@ -62,13 +62,13 @@ func TestParseTag(t *testing.T) {
 				// Arrange
 
 				// Act
-				got, err := ParseTag(tt.input)
+				gotTag, err := ParseTag(tt.input)
 
 				// Assert
 				a := assert.New(t)
 				a.Error(err)
 				a.Equal(err.Error(), "invalid tag: "+tt.input)
-				a.Equal(tt.wantTag, got)
+				a.Equal(tt.wantTag, gotTag)
 			})
 		}
 	})

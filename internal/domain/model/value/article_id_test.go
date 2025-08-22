@@ -26,11 +26,12 @@ func TestNewArticleID(t *testing.T) {
 				// Arrange
 
 				// Act
+				gotArticleID, err := NewArticleID(tt.input)
 
 				// Assert
 				a := assert.New(t)
 				a.NoError(err)
-				a.Equal(tt.input, got.Value())
+				a.Equal(tt.input, gotArticleID.Value())
 			})
 		}
 	})
@@ -54,13 +55,13 @@ func TestNewArticleID(t *testing.T) {
 				// Arrange
 
 				// Act
-				got, err := NewArticleID(tt.input)
+				gotArticleID, err := NewArticleID(tt.input)
 
 				// Assert
 				a := assert.New(t)
 				a.Error(err)
 				a.Contains(err.Error(), tt.wantErrMsg)
-				a.Nil(got)
+				a.Nil(gotArticleID)
 			})
 		}
 	})
