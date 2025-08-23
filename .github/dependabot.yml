@@ -11,6 +11,8 @@ updates:
     open-pull-requests-limit: 20
     reviewers:
       - "kageyamountain"
+    assignees:
+      - "kageyamountain"
 
   # Docker
   - package-ecosystem: "docker"
@@ -22,4 +24,6 @@ updates:
       timezone: "Asia/Tokyo"
     open-pull-requests-limit: 20
     reviewers:
+      - "kageyamountain"
+    assignees:
       - "kageyamountain"
