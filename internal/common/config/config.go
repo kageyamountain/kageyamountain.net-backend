@@ -9,10 +9,15 @@ type AppConfig struct {
 }
 
 type AWSConfig struct {
-	AccessKeyID         string `envconfig:"ACCESS_KEY_ID" required:"true"`
-	SecretAccessKey     string `envconfig:"SECRET_ACCESS_KEY" required:"true"`
-	DynamoDBRegion      string `envconfig:"DYNAMODB_REGION" required:"true"`
-	DynamoDBEndpointURL string `envconfig:"DYNAMODB_ENDPOINT_URL" required:"true"`
+	AccessKeyID     string         `envconfig:"ACCESS_KEY_ID" required:"true"`
+	SecretAccessKey string         `envconfig:"SECRET_ACCESS_KEY" required:"true"`
+	DynamoDB        DynamoDBConfig `envconfig:"DYNAMODB"`
+}
+
+type DynamoDBConfig struct {
+	Region           string `envconfig:"REGION" required:"true"`
+	EndpointURL      string `envconfig:"ENDPOINT_URL" required:"true"`
+	TableNameArticle string `envconfig:"TABLE_NAME_ARTICLE" required:"true"`
 }
 
 // APPプレフィックスを持つ環境変数を構造体に読み込む
