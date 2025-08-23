@@ -3,6 +3,7 @@ package integration
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -24,14 +25,14 @@ func TestArticlesGet(t *testing.T) {
 	t.Parallel()
 	helper.InitializeIntegrationTest(t)
 
-	t.Run("正常系: 公開ステータスの記事一覧情報が公開日の降順ソートで取得されること", func(t *testing.T) {
+	t.Run("正常系: 公開ステータスの記事一覧情報が公開日の降順ソートで取得される", func(t *testing.T) {
 		t.Parallel()
 		tests := []struct {
 			name              string
 			testArticleInputs []entity.NewArticleInput
 		}{
 			{
-				name: "",
+				name: "ステータス=draftは取得されないこと",
 				testArticleInputs: []entity.NewArticleInput{
 					{
 						ID:            value.GenerateArticleID().Value(),
@@ -125,7 +126,7 @@ func TestArticlesGet(t *testing.T) {
 				t.Cleanup(func() { testServer.Close() })
 
 				// リクエストの作成
-				req, err := http.NewRequest(http.MethodGet, testServer.URL+"/articles", http.NoBody)
+				req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/articles", testServer.URL), http.NoBody)
 				require.NoError(t, err)
 
 				// Act
