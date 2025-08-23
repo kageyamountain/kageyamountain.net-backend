@@ -3,12 +3,10 @@ package enum
 import (
 	"testing"
 
-	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestParseStatus(t *testing.T) {
-	gin.SetMode(gin.TestMode)
 	t.Parallel()
 
 	t.Run("正常系", func(t *testing.T) {

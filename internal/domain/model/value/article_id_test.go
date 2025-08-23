@@ -4,12 +4,10 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewArticleID(t *testing.T) {
-	gin.SetMode(gin.TestMode)
 	t.Parallel()
 
 	t.Run("正常系", func(t *testing.T) {
@@ -68,7 +66,6 @@ func TestNewArticleID(t *testing.T) {
 }
 
 func TestGenerateArticleID(t *testing.T) {
-	gin.SetMode(gin.TestMode)
 	t.Parallel()
 
 	t.Run("正常系", func(t *testing.T) {
