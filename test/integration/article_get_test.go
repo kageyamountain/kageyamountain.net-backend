@@ -1,0 +1,257 @@
+package integration
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"testing"
+	"time"
+
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/entity"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value/enum"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/gateway"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/router"
+	"github.com/kageyamountain/kageyamountain.net-backend/test/helper"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+)
+
+func TestArticleGet(t *testing.T) {
+	t.Parallel()
+	helper.InitializeIntegrationTest(t)
+
+	t.Run("正常系: ステータス=publishの記事IDを指定すると記事情報を取得する", func(t *testing.T) {
+		t.Parallel()
+		tests := []struct {
+			name              string
+			testArticleInputs []entity.NewArticleInput
+		}{
+			{
+				name: "2つのpublish, 1つのdraft",
+				testArticleInputs: []entity.NewArticleInput{
+					{
+						ID:            value.GenerateArticleID().Value(),
+						Status:        enum.StatusPublish.String(),
+						CreatedAt:     time.Date(2024, 12, 14, 10, 14, 14, 0, time.UTC),
+						PublishedAt:   time.Date(2024, 12, 14, 10, 14, 14, 0, time.UTC),
+						PublishedYear: "2024",
+						Title:         "テストデータ1",
+						Contents: `# テストデータ1
+## 見出し1
+- aaa
+- bbb
+- ccc 
+`,
+						Tags: []string{enum.TagGo.String(), enum.TagGin.String(), enum.TagAWS.String(), enum.TagDynamoDB.String()},
+					},
+					{
+						ID:            value.GenerateArticleID().Value(),
+						Status:        enum.StatusPublish.String(),
+						CreatedAt:     time.Date(2024, 11, 14, 10, 14, 14, 0, time.UTC),
+						PublishedAt:   time.Date(2024, 11, 14, 10, 14, 14, 0, time.UTC),
+						PublishedYear: "2024",
+						Title:         "テストデータ2",
+						Contents: `# テストデータ2
+## 見出し1
+- aaa
+- bbb
+- ccc 
+`,
+						Tags: []string{enum.TagGo.String(), enum.TagGin.String(), enum.TagAWS.String(), enum.TagDynamoDB.String()},
+					},
+					{
+						ID:            value.GenerateArticleID().Value(),
+						Status:        enum.StatusDraft.String(),
+						CreatedAt:     time.Date(2024, 10, 14, 10, 14, 14, 0, time.UTC),
+						PublishedAt:   time.Date(2024, 10, 14, 10, 14, 14, 0, time.UTC),
+						PublishedYear: "2024",
+						Title:         "テストデータ3",
+						Contents: `# テストデータ3
+## 見出し1
+- aaa
+- bbb
+- ccc 
+`,
+						Tags: []string{enum.TagAWS.String()},
+					},
+				},
+			},
+		}
+
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				t.Parallel()
+				// Arrange
+				ctx := context.Background()
+				appConfig, err := config.Load()
+				require.NoError(t, err)
+
+				// テストデータ作成＆DynamoDBへ登録
+				var articles []entity.Article
+				for _, testArticleInput := range tt.testArticleInputs {
+					// DynamoDB登録用のEntity作成
+					article, err := entity.NewArticle(&testArticleInput)
+					require.NoError(t, err)
+					articles = append(articles, *article)
+				}
+				dynamoDB, err := gateway.NewDynamoDB(ctx, appConfig)
+				require.NoError(t, err)
+				helper.InsertTestArticles(t, ctx, appConfig, dynamoDB, articles)
+
+				// ルーターのセットアップ
+				r, err := router.Setup(ctx, appConfig)
+				require.NoError(t, err)
+
+				testServer := httptest.NewServer(r)
+				t.Cleanup(func() { testServer.Close() })
+
+				// リクエストの作成（1つめのテストデータを取得）
+				req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/articles/%s", testServer.URL, tt.testArticleInputs[0].ID), http.NoBody)
+				require.NoError(t, err)
+
+				// Act
+				client := &http.Client{}
+				gotResponse, err := client.Do(req)
+				require.NoError(t, err)
+				t.Cleanup(func() {
+					err := gotResponse.Body.Close()
+					require.NoError(t, err)
+				})
+
+				// Assert
+				wantResponseBody := openapi.Article{
+					Id:          tt.testArticleInputs[0].ID,
+					PublishedAt: tt.testArticleInputs[0].PublishedAt,
+					Title:       tt.testArticleInputs[0].Title,
+					Contents:    &tt.testArticleInputs[0].Contents,
+					Tags:        tt.testArticleInputs[0].Tags,
+				}
+
+				var decodedGotResponseBody openapi.Article
+				err = json.NewDecoder(gotResponse.Body).Decode(&decodedGotResponseBody)
+				require.NoError(t, err)
+
+				a := assert.New(t)
+				a.Equal(http.StatusOK, gotResponse.StatusCode)
+				a.Equal(wantResponseBody, decodedGotResponseBody)
+			})
+		}
+	})
+
+	t.Run("正常系: ステータス=draftの記事IDを指定すると404エラーレスポンスが返る", func(t *testing.T) {
+		t.Parallel()
+		tests := []struct {
+			name              string
+			testArticleInputs []entity.NewArticleInput
+		}{
+			{
+				name: "2つのpublish, 1つのdraft",
+				testArticleInputs: []entity.NewArticleInput{
+					{
+						ID:            value.GenerateArticleID().Value(),
+						Status:        enum.StatusPublish.String(),
+						CreatedAt:     time.Date(2024, 12, 14, 10, 14, 14, 0, time.UTC),
+						PublishedAt:   time.Date(2024, 12, 14, 10, 14, 14, 0, time.UTC),
+						PublishedYear: "2024",
+						Title:         "テストデータ1",
+						Contents: `# テストデータ1
+## 見出し1
+- aaa
+- bbb
+- ccc 
+`,
+						Tags: []string{enum.TagGo.String(), enum.TagGin.String(), enum.TagAWS.String(), enum.TagDynamoDB.String()},
+					},
+					{
+						ID:            value.GenerateArticleID().Value(),
+						Status:        enum.StatusPublish.String(),
+						CreatedAt:     time.Date(2024, 11, 14, 10, 14, 14, 0, time.UTC),
+						PublishedAt:   time.Date(2024, 11, 14, 10, 14, 14, 0, time.UTC),
+						PublishedYear: "2024",
+						Title:         "テストデータ2",
+						Contents: `# テストデータ2
+## 見出し1
+- aaa
+- bbb
+- ccc 
+`,
+						Tags: []string{enum.TagGo.String(), enum.TagGin.String(), enum.TagAWS.String(), enum.TagDynamoDB.String()},
+					},
+					{
+						ID:            value.GenerateArticleID().Value(),
+						Status:        enum.StatusDraft.String(),
+						CreatedAt:     time.Date(2024, 10, 14, 10, 14, 14, 0, time.UTC),
+						PublishedAt:   time.Date(2024, 10, 14, 10, 14, 14, 0, time.UTC),
+						PublishedYear: "2024",
+						Title:         "テストデータ3",
+						Contents: `# テストデータ3
+## 見出し1
+- aaa
+- bbb
+- ccc 
+`,
+						Tags: []string{enum.TagAWS.String()},
+					},
+				},
+			},
+		}
+
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				t.Parallel()
+				// Arrange
+				ctx := context.Background()
+				appConfig, err := config.Load()
+				require.NoError(t, err)
+
+				// テストデータ作成＆DynamoDBへ登録
+				var articles []entity.Article
+				for _, testArticleInput := range tt.testArticleInputs {
+					// DynamoDB登録用のEntity作成
+					article, err := entity.NewArticle(&testArticleInput)
+					require.NoError(t, err)
+					articles = append(articles, *article)
+				}
+				dynamoDB, err := gateway.NewDynamoDB(ctx, appConfig)
+				require.NoError(t, err)
+				helper.InsertTestArticles(t, ctx, appConfig, dynamoDB, articles)
+
+				// ルーターのセットアップ
+				r, err := router.Setup(ctx, appConfig)
+				require.NoError(t, err)
+
+				testServer := httptest.NewServer(r)
+				t.Cleanup(func() { testServer.Close() })
+
+				// リクエストの作成（3つめのテストデータを取得）
+				req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/articles/%s", testServer.URL, tt.testArticleInputs[2].ID), http.NoBody)
+				require.NoError(t, err)
+
+				// Act
+				client := &http.Client{}
+				gotResponse, err := client.Do(req)
+				require.NoError(t, err)
+				t.Cleanup(func() {
+					err := gotResponse.Body.Close()
+					require.NoError(t, err)
+				})
+
+				// Assert
+				wantResponseBody := openapi.Article{} // ゼロ値のArticle
+
+				var decodedGotResponseBody openapi.Article
+				err = json.NewDecoder(gotResponse.Body).Decode(&decodedGotResponseBody)
+				require.NoError(t, err)
+
+				a := assert.New(t)
+				a.Equal(http.StatusNotFound, gotResponse.StatusCode)
+				a.Equal(wantResponseBody, decodedGotResponseBody)
+			})
+		}
+	})
+}
