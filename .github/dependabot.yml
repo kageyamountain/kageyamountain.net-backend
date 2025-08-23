@@ -1,0 +1,27 @@
+version: 2
+updates:
+  # Go
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "cron"
+      cronjob: "0 20 1-7 * 5" # 毎月第一金曜日の20時
+      timezone: "Asia/Tokyo"
+    open-pull-requests-limit: 20
+    reviewers:
+      - "kageyamountain"
+    assignees:
+      - "kageyamountain"
+
+  # Docker
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "cron"
+      cronjob: "0 20 1-7 * 5" # 毎月第一金曜日の20時
+      timezone: "Asia/Tokyo"
+    open-pull-requests-limit: 20
+    reviewers:
+      - "kageyamountain"
+    assignees:
+      - "kageyamountain"
