@@ -71,6 +71,7 @@ func TestGenerateArticleID(t *testing.T) {
 	t.Parallel()
 
 	t.Run("正常系", func(t *testing.T) {
+		t.Parallel()
 		t.Run("生成されたIDは32文字の小文字16進数でハイフン無し", func(t *testing.T) {
 			t.Parallel()
 			// Arrange
