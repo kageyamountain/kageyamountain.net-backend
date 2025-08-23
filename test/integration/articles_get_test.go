@@ -125,6 +125,8 @@ func TestArticlesGet(t *testing.T) {
 				testServer := httptest.NewServer(r)
 				t.Cleanup(func() { testServer.Close() })
 
+				// リクエストの作成
+				req, err := http.NewRequest(http.MethodGet, testServer.URL+"/articles", http.NoBody)
 				require.NoError(t, err)
 
 				// Act

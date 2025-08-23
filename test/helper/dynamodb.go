@@ -36,18 +36,18 @@ func InsertTestArticles(
 	createTestTableArticle(t, ctx, dynamoDB, appConfig.AWS.DynamoDB.TableNameArticle)
 
 	// テストデータ登録
-	for _, article := range articles {
+	for i := range articles {
 		dbModel := dbmodel.Article{
-			PK:            article.ID.Value(),
-			Status:        article.Status.String(),
-			CreatedAt:     article.CreatedAt.Unix(),
-			PublishedAt:   article.PublishedAt.Unix(),
-			PublishedYear: article.PublishedYear,
-			Title:         article.Title,
-			Contents:      article.Contents,
-			Tags:          make([]string, len(article.Tags)),
+			PK:            articles[i].ID.Value(),
+			Status:        articles[i].Status.String(),
+			CreatedAt:     articles[i].CreatedAt.Unix(),
+			PublishedAt:   articles[i].PublishedAt.Unix(),
+			PublishedYear: articles[i].PublishedYear,
+			Title:         articles[i].Title,
+			Contents:      articles[i].Contents,
+			Tags:          make([]string, len(articles[i].Tags)),
 		}
-		for i, tag := range article.Tags {
+		for i, tag := range articles[i].Tags {
 			dbModel.Tags[i] = tag.String()
 		}
 
