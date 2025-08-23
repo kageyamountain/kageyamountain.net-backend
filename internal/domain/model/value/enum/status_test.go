@@ -11,7 +11,6 @@ func TestParseStatus(t *testing.T) {
 
 	t.Run("正常系", func(t *testing.T) {
 		t.Parallel()
-
 		tests := []struct {
 			name       string
 			input      string
@@ -27,19 +26,18 @@ func TestParseStatus(t *testing.T) {
 				// Arrange
 
 				// Act
-				got, err := ParseStatus(tt.input)
+				gotStatus, err := ParseStatus(tt.input)
 
 				// Assert
 				a := assert.New(t)
 				a.NoError(err)
-				a.Equal(tt.wantStatus, got)
+				a.Equal(tt.wantStatus, gotStatus)
 			})
 		}
 	})
 
 	t.Run("異常系", func(t *testing.T) {
 		t.Parallel()
-
 		tests := []struct {
 			name       string
 			input      string
@@ -56,13 +54,13 @@ func TestParseStatus(t *testing.T) {
 				// Arrange
 
 				// Act
-				got, err := ParseStatus(tt.input)
+				gotStatus, err := ParseStatus(tt.input)
 
 				// Assert
 				a := assert.New(t)
 				a.Error(err)
 				a.Equal("invalid status: "+tt.input, err.Error())
-				a.Equal(tt.wantStatus, got)
+				a.Equal(tt.wantStatus, gotStatus)
 			})
 		}
 	})

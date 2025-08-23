@@ -32,7 +32,7 @@ func main() {
 
 	// AWS設定の読み込み
 	cfg, err := awsConfig.LoadDefaultConfig(context.TODO(),
-		awsConfig.WithRegion(appConfig.AWS.DynamoDBRegion),
+		awsConfig.WithRegion(appConfig.AWS.DynamoDB.Region),
 		awsConfig.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(
 			appConfig.AWS.AccessKeyID, appConfig.AWS.SecretAccessKey, "",
 		)),
@@ -43,7 +43,7 @@ func main() {
 
 	// DynamoDBクライアントの作成
 	client := dynamodb.NewFromConfig(cfg, func(o *dynamodb.Options) {
-		o.BaseEndpoint = aws.String(appConfig.AWS.DynamoDBEndpointURL)
+		o.BaseEndpoint = aws.String(appConfig.AWS.DynamoDB.EndpointURL)
 	})
 
 	// Key Condition Expression: status = "publish"

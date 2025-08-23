@@ -36,7 +36,7 @@ func initializeHandler(ctx context.Context, appConfig *config.AppConfig) (*opena
 	}
 
 	// repository
-	articleRepository := repository.NewArticleRepository(dynamoDB)
+	articleRepository := repository.NewArticleRepository(dynamoDB, appConfig)
 
 	// UseCase
 	articlesUsecase := usecase.NewArticlesUseCase(articleRepository)

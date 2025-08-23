@@ -61,6 +61,13 @@ tasks:
     cmds:
       - go fmt ./...
 
+  # AppConfig
+  appconfig:
+    desc: .env.devのAppConfigマッピングを確認
+    silent: true
+    cmds:
+      - go run ./cmd/dev/appconfig/main.go
+
   # DynamoDB local
   table-create:
     desc: 開発用DynamoDBのテーブルを作成
