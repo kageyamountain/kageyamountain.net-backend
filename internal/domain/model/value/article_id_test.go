@@ -12,7 +12,6 @@ func TestNewArticleID(t *testing.T) {
 
 	t.Run("正常系", func(t *testing.T) {
 		t.Parallel()
-
 		tests := []struct {
 			name  string
 			input string
@@ -38,7 +37,6 @@ func TestNewArticleID(t *testing.T) {
 
 	t.Run("異常系", func(t *testing.T) {
 		t.Parallel()
-
 		tests := []struct {
 			name       string
 			input      string
