@@ -37,11 +37,11 @@ jobs:
         run: go mod download
 
       - name: DynamoDBの起動待機
-        run: | # CI環境ではヘルスチェック実施
+        run: | # CI環境では疎通確認（レスポンスのステータスは問わない）
           if [ -n "$ACT" ]; then
             echo "act mode..."
           else
-            until curl -f http://localhost:7999/
+            until curl -s http://localhost:7999/ > /dev/null
             do
               echo "Waiting for DynamoDB startup..."
               sleep 2
