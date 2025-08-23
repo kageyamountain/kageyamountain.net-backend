@@ -1,6 +1,7 @@
 package helper
 
 import (
+	"os"
 	"sync"
 	"testing"
 
@@ -21,6 +22,15 @@ func InitializeIntegrationTest(t testing.TB) {
 func loadEnvFile(t testing.TB) {
 	t.Helper()
 
-	err := godotenv.Load("../../.env.dev")
-	require.NoError(t, err)
+	env := os.Getenv("ENV")
+
+	if env == "ci" {
+		// CI環境
+		err := godotenv.Load("../../.env.ci")
+		require.NoError(t, err)
+	} else {
+		// ローカル開発環境
+		err := godotenv.Load("../../.env.dev")
+		require.NoError(t, err)
+	}
 }

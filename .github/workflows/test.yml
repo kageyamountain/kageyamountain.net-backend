@@ -1,3 +1,7 @@
+# DynamoDBの起動やテスト実行の動作を制御するワークフロー
+# - ローカル環境でactを利用する場合は、事前に開発用DynamoDBを起動しておくこと
+# - 当ワークフロー内で起動するDynamoDBサービスはCI環境でのみ利用する
+# - Windows環境でactからサービス名で名前解決できないための対応
 name: test
 
 on:
@@ -12,6 +16,13 @@ jobs:
   test:
     name: test
     runs-on: ubuntu-latest
+
+    services:
+      dynamodb:
+        image: amazon/dynamodb-local:latest
+        ports:
+          - 7999:8000
+
     steps:
       - name: リポジトリのチェックアウト
         uses: actions/checkout@v4
@@ -25,5 +36,22 @@ jobs:
       - name: 依存関係のダウンロード
         run: go mod download
 
+      - name: DynamoDBの起動待機
+        run: | # CI環境ではヘルスチェック実施
+          if [ -n "$ACT" ]; then
+            echo "act mode..."
+          else
+            until curl -f http://localhost:7999/
+            do
+              echo "Waiting for DynamoDB startup..."
+              sleep 2
+            done
+          fi
+
       - name: テスト実行
-        run: go test -race ./...
+        run: | # CI環境では環境変数"ENV=ci"を設定
+          if [ -n "$ACT" ]; then
+            go test -race ./...
+          else
+            env ENV=ci go test -race ./...
+          fi
