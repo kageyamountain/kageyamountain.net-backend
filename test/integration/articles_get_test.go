@@ -9,6 +9,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/entity"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value"
@@ -22,6 +23,7 @@ import (
 )
 
 func TestArticlesGet(t *testing.T) {
+	gin.SetMode(gin.TestMode)
 	t.Parallel()
 	helper.InitializeIntegrationTest(t)
 

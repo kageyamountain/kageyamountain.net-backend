@@ -30,7 +30,6 @@ func InsertTestArticles(
 
 	// 並列テスト実行のためにユニークなテーブル名に変更
 	appConfig.AWS.DynamoDB.TableNameArticle = fmt.Sprintf("%s_test_%s", appConfig.AWS.DynamoDB.TableNameArticle, uuid.New().String())
-	fmt.Println(appConfig.AWS.DynamoDB.TableNameArticle)
 
 	// テスト用のテーブル作成（テスト終了時のテーブル削除処理含む）
 	createTestTableArticle(t, ctx, dynamoDB, appConfig.AWS.DynamoDB.TableNameArticle)
