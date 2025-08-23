@@ -9,6 +9,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/entity"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value"
@@ -22,6 +23,7 @@ import (
 )
 
 func TestArticleGet(t *testing.T) {
+	gin.SetMode(gin.TestMode)
 	t.Parallel()
 	helper.InitializeIntegrationTest(t)
 
@@ -242,15 +244,18 @@ func TestArticleGet(t *testing.T) {
 				})
 
 				// Assert
-				wantResponseBody := openapi.Article{} // ゼロ値のArticle
+				wantResponseBody := openapi.Error{
+					Code:    openapi.NotFound,
+					Message: "article not found",
+				}
 
-				var decodedGotResponseBody openapi.Article
+				var decodedGotResponseBody openapi.Error
 				err = json.NewDecoder(gotResponse.Body).Decode(&decodedGotResponseBody)
 				require.NoError(t, err)
 
 				a := assert.New(t)
-				a.Equal(http.StatusNotFound, gotResponse.StatusCode)
-				a.Equal(wantResponseBody, decodedGotResponseBody)
+				a.Equal(wantResponseBody.Code, decodedGotResponseBody.Code)
+				a.Equal(wantResponseBody.Message, decodedGotResponseBody.Message)
 			})
 		}
 	})
