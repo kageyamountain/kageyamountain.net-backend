@@ -16,7 +16,7 @@ type DynamoDB struct {
 
 func NewDynamoDB(ctx context.Context, appConfig *config.AppConfig) (*DynamoDB, error) {
 	cfg, err := awsConfig.LoadDefaultConfig(ctx,
-		awsConfig.WithRegion(appConfig.AWS.DynamoDBRegion),
+		awsConfig.WithRegion(appConfig.AWS.DynamoDB.Region),
 		awsConfig.WithCredentialsProvider(
 			credentials.NewStaticCredentialsProvider(
 				appConfig.AWS.AccessKeyID, appConfig.AWS.SecretAccessKey, "",
@@ -28,7 +28,7 @@ func NewDynamoDB(ctx context.Context, appConfig *config.AppConfig) (*DynamoDB, e
 	}
 
 	client := dynamodb.NewFromConfig(cfg, func(o *dynamodb.Options) {
-		o.BaseEndpoint = aws.String(appConfig.AWS.DynamoDBEndpointURL)
+		o.BaseEndpoint = aws.String(appConfig.AWS.DynamoDB.EndpointURL)
 	})
 
 	return &DynamoDB{

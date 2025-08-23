@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/entity"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/repository"
@@ -18,24 +19,26 @@ import (
 )
 
 type articleRepository struct {
-	dynamoDB *gateway.DynamoDB
+	dynamoDB  *gateway.DynamoDB
+	appConfig *config.AppConfig
 }
 
-func NewArticleRepository(dynamoDB *gateway.DynamoDB) repository.ArticleRepository {
+func NewArticleRepository(dynamoDB *gateway.DynamoDB, appConfig *config.AppConfig) repository.ArticleRepository {
 	return &articleRepository{
-		dynamoDB: dynamoDB,
+		dynamoDB:  dynamoDB,
+		appConfig: appConfig,
 	}
 }
 
 func (a articleRepository) FindAllForList(ctx context.Context) ([]*entity.Article, error) {
 	// データ取得仕様の定義
-	keyCondition := expression.Key(constant.Article.Attribute.Status).Equal(expression.Value("publish"))
+	keyCondition := expression.Key(constant.ArticleAttributeStatus).Equal(expression.Value("publish"))
 	projection := expression.NamesList(
-		expression.Name(constant.Article.Attribute.PK),
-		expression.Name(constant.Article.Attribute.Status),
-		expression.Name(constant.Article.Attribute.PublishedAt),
-		expression.Name(constant.Article.Attribute.Title),
-		expression.Name(constant.Article.Attribute.Tags),
+		expression.Name(constant.ArticleAttributePK),
+		expression.Name(constant.ArticleAttributeStatus),
+		expression.Name(constant.ArticleAttributePublishedAt),
+		expression.Name(constant.ArticleAttributeTitle),
+		expression.Name(constant.ArticleAttributeTags),
 	)
 	exp, err := expression.NewBuilder().WithKeyCondition(keyCondition).WithProjection(projection).Build()
 	if err != nil {
@@ -44,8 +47,8 @@ func (a articleRepository) FindAllForList(ctx context.Context) ([]*entity.Articl
 
 	// データ取得
 	result, err := a.dynamoDB.Client().Query(ctx, &dynamodb.QueryInput{
-		TableName:                 aws.String(constant.Article.TableName),
-		IndexName:                 aws.String(constant.Article.GSI.PublishedArticleIndex),
+		TableName:                 aws.String(a.appConfig.AWS.DynamoDB.TableNameArticle),
+		IndexName:                 aws.String(constant.ArticleGSIPublishedArticle),
 		KeyConditionExpression:    exp.KeyCondition(),
 		ProjectionExpression:      exp.Projection(),
 		ExpressionAttributeNames:  exp.Names(),
@@ -86,9 +89,9 @@ func (a articleRepository) FindAllForList(ctx context.Context) ([]*entity.Articl
 func (a articleRepository) FindByID(ctx context.Context, articleID *value.ArticleID) (*entity.Article, error) {
 	// データ取得
 	result, err := a.dynamoDB.Client().GetItem(ctx, &dynamodb.GetItemInput{
-		TableName: aws.String(constant.Article.TableName),
+		TableName: aws.String(a.appConfig.AWS.DynamoDB.TableNameArticle),
 		Key: map[string]types.AttributeValue{
-			constant.Article.PartitionKey: &types.AttributeValueMemberS{
+			constant.ArticleAttributePK: &types.AttributeValueMemberS{
 				Value: articleID.Value(),
 			},
 		},
