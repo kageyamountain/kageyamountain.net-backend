@@ -69,7 +69,7 @@ func TestNewArticle(t *testing.T) {
 
 				wantID, err := value.NewArticleID(tt.input.ID)
 				r.NoError(err)
-				want := &Article{
+				wantArticle := &Article{
 					ID:            *wantID,
 					Status:        tt.wantStatus,
 					CreatedAt:     tt.input.CreatedAt,
@@ -79,7 +79,7 @@ func TestNewArticle(t *testing.T) {
 					Contents:      tt.input.Contents,
 					Tags:          tt.wantTags,
 				}
-				a.Equal(want, gotArticle)
+				a.Equal(wantArticle, gotArticle)
 			})
 		}
 	})
