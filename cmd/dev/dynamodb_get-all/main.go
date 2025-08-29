@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository/constant"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository/dbmodel"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -57,8 +58,8 @@ func main() {
 
 	// Query実行
 	result, err := client.Query(context.TODO(), &dynamodb.QueryInput{
-		TableName:                 aws.String("article"),
-		IndexName:                 aws.String("publishedArticleIndex"), // GSIを指定
+		TableName:                 aws.String(appConfig.AWS.DynamoDB.TableNameArticle),
+		IndexName:                 aws.String(constant.ArticleGSIPublishedArticle), // GSIを指定
 		KeyConditionExpression:    expr.KeyCondition(),
 		ExpressionAttributeNames:  expr.Names(),
 		ExpressionAttributeValues: expr.Values(),

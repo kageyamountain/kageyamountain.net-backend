@@ -85,7 +85,7 @@ func main() {
 
 	// PutItem実行
 	_, err = client.PutItem(context.TODO(), &dynamodb.PutItemInput{
-		TableName:                aws.String("article"),
+		TableName:                aws.String(appConfig.AWS.DynamoDB.TableNameArticle),
 		Item:                     item,
 		ConditionExpression:      expr.Condition(),
 		ExpressionAttributeNames: expr.Names(),
