@@ -2,11 +2,15 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 
+	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value/enum"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository/constant"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository/dbmodel"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -72,13 +76,23 @@ func main() {
 		log.Fatalf("データの変換に失敗しました: %v", err)
 	}
 
+	// PK重複登録防止の条件式
+	condition := expression.AttributeNotExists(expression.Name(constant.ArticleAttributePK))
+	expr, err := expression.NewBuilder().WithCondition(condition).Build()
+
 	// PutItem実行
 	_, err = client.PutItem(context.TODO(), &dynamodb.PutItemInput{
-		TableName: aws.String("article"),
-		Item:      item,
+		TableName:                aws.String("article"),
+		Item:                     item,
+		ConditionExpression:      expr.Condition(),
+		ExpressionAttributeNames: expr.Names(),
 	})
 
 	if err != nil {
+		var condCheckErr *types.ConditionalCheckFailedException
+		if errors.As(err, &condCheckErr) {
+			log.Fatalf("データ登録に失敗しました: %v", err)
+		}
 		log.Fatalf("データ登録に失敗しました: %v", err)
 	}
 
