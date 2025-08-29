@@ -5,7 +5,8 @@ import (
 )
 
 type AppConfig struct {
-	AWS AWSConfig `envconfig:"AWS"`
+	AWS      AWSConfig      `envconfig:"AWS"`
+	Frontend FrontendConfig `envconfig:"FRONTEND"`
 }
 
 type AWSConfig struct {
@@ -18,6 +19,10 @@ type DynamoDBConfig struct {
 	Region           string `envconfig:"REGION" required:"true"`
 	EndpointURL      string `envconfig:"ENDPOINT_URL" required:"true"`
 	TableNameArticle string `envconfig:"TABLE_NAME_ARTICLE" required:"true"`
+}
+
+type FrontendConfig struct {
+	HostURL string `envconfig:"HOST_URL" required:"true"`
 }
 
 // APPプレフィックスを持つ環境変数を構造体に読み込む

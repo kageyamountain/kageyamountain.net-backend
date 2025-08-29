@@ -4,8 +4,8 @@ updates:
   - package-ecosystem: "gomod"
     directory: "/"
     schedule:
-      interval: "cron"
-      cronjob: "0 20 1-7 * 5" # 毎月第一金曜日の20時
+      interval: "monthly"
+      time: "20:00"
       timezone: "Asia/Tokyo"
     open-pull-requests-limit: 20
     reviewers:
@@ -17,8 +17,8 @@ updates:
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
-      interval: "cron"
-      cronjob: "0 20 1-7 * 5" # 毎月第一金曜日の20時
+      interval: "monthly"
+      time: "20:00"
       timezone: "Asia/Tokyo"
     open-pull-requests-limit: 20
     reviewers:

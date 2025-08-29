@@ -16,7 +16,7 @@ const (
 	HttpHeaderAccessControlExposeHeaders = "Access-Control-Expose-Headers"
 )
 
-func Logging() gin.HandlerFunc {
+func Log() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now()
 

@@ -19,8 +19,10 @@ func Setup(ctx context.Context, appConfig *config.AppConfig) (*gin.Engine, error
 		return nil, err
 	}
 
-	r := gin.Default()
-	r.Use(middleware.Logging())
+	r := gin.New()
+	r.Use(gin.Recovery())
+	r.Use(middleware.CORS(appConfig))
+	r.Use(middleware.Log())
 
 	r.GET("/articles", siw.ArticlesGet)            // 記事一覧
 	r.GET("/articles/:article-id", siw.ArticleGet) // 記事詳細

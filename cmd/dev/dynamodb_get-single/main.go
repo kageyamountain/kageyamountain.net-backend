@@ -51,7 +51,7 @@ func main() {
 
 	// GetItem実行
 	result, err := client.GetItem(context.TODO(), &dynamodb.GetItemInput{
-		TableName: aws.String("article"),
+		TableName: aws.String(appConfig.AWS.DynamoDB.TableNameArticle),
 		Key: map[string]types.AttributeValue{
 			"pk": &types.AttributeValueMemberS{Value: targetPK},
 		},
