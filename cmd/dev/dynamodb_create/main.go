@@ -79,6 +79,9 @@ func main() {
 	// PK重複登録防止の条件式
 	condition := expression.AttributeNotExists(expression.Name(constant.ArticleAttributePK))
 	expr, err := expression.NewBuilder().WithCondition(condition).Build()
+	if err != nil {
+		log.Fatalf("expression build error: %v", err)
+	}
 
 	// PutItem実行
 	_, err = client.PutItem(context.TODO(), &dynamodb.PutItemInput{
