@@ -8,7 +8,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
-	appConfig "github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
+	appconfig "github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value/enum"
 	appDynamoDB "github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/gateway/dynamodb"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository/dbmodel"
@@ -28,7 +28,7 @@ func main() {
 		return
 	}
 
-	appConfig, err := appConfig.Load()
+	appConfig, err := appconfig.Load()
 	if err != nil {
 		log.Fatal("Error AppConfig Load. err:", err)
 		return

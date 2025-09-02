@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	appConfig "github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
+	appconfig "github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository/dbmodel"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -24,7 +24,7 @@ func main() {
 		return
 	}
 
-	appConfig, err := appConfig.Load()
+	appConfig, err := appconfig.Load()
 	if err != nil {
 		log.Fatal("Error AppConfig Load. err:", err)
 		return
