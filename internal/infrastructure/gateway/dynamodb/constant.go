@@ -1,4 +1,4 @@
-package constant
+package dynamodb
 
 // テーブル名はAppConfigから取得する
 const (

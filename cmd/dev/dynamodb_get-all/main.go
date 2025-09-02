@@ -5,17 +5,16 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository/constant"
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository/dbmodel"
-
 	"github.com/aws/aws-sdk-go-v2/aws"
-	awsConfig "github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/joho/godotenv"
+	appconfig "github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
+	appDynamoDB "github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/gateway/dynamodb"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository/dbmodel"
 )
 
 func main() {
@@ -25,16 +24,16 @@ func main() {
 		return
 	}
 
-	appConfig, err := config.Load()
+	appConfig, err := appconfig.Load()
 	if err != nil {
 		log.Fatal("Error AppConfig Load. err:", err)
 		return
 	}
 
 	// AWS設定の読み込み
-	cfg, err := awsConfig.LoadDefaultConfig(context.TODO(),
-		awsConfig.WithRegion(appConfig.AWS.DynamoDB.Region),
-		awsConfig.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(
+	cfg, err := config.LoadDefaultConfig(context.TODO(),
+		config.WithRegion(appConfig.AWS.DynamoDB.Region),
+		config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(
 			appConfig.AWS.AccessKeyID, appConfig.AWS.SecretAccessKey, "",
 		)),
 	)
@@ -59,7 +58,7 @@ func main() {
 	// Query実行
 	result, err := client.Query(context.TODO(), &dynamodb.QueryInput{
 		TableName:                 aws.String(appConfig.AWS.DynamoDB.TableNameArticle),
-		IndexName:                 aws.String(constant.ArticleGSIPublishedArticle), // GSIを指定
+		IndexName:                 aws.String(appDynamoDB.ArticleGSIPublishedArticle), // GSIを指定
 		KeyConditionExpression:    expr.KeyCondition(),
 		ExpressionAttributeNames:  expr.Names(),
 		ExpressionAttributeValues: expr.Values(),

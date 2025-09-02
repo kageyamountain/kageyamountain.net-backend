@@ -13,17 +13,16 @@ import (
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/entity"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/repository"
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/gateway"
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository/constant"
+	appDynamoDB "github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/gateway/dynamodb"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository/dbmodel"
 )
 
 type articleRepository struct {
-	dynamoDB  *gateway.DynamoDB
+	dynamoDB  *appDynamoDB.Client
 	appConfig *config.AppConfig
 }
 
-func NewArticleRepository(dynamoDB *gateway.DynamoDB, appConfig *config.AppConfig) repository.ArticleRepository {
+func NewArticleRepository(dynamoDB *appDynamoDB.Client, appConfig *config.AppConfig) repository.ArticleRepository {
 	return &articleRepository{
 		dynamoDB:  dynamoDB,
 		appConfig: appConfig,
@@ -32,13 +31,13 @@ func NewArticleRepository(dynamoDB *gateway.DynamoDB, appConfig *config.AppConfi
 
 func (a articleRepository) FindAllForList(ctx context.Context) ([]*entity.Article, error) {
 	// データ取得仕様の定義
-	keyCondition := expression.Key(constant.ArticleAttributeStatus).Equal(expression.Value("publish"))
+	keyCondition := expression.Key(appDynamoDB.ArticleAttributeStatus).Equal(expression.Value("publish"))
 	projection := expression.NamesList(
-		expression.Name(constant.ArticleAttributePK),
-		expression.Name(constant.ArticleAttributeStatus),
-		expression.Name(constant.ArticleAttributePublishedAt),
-		expression.Name(constant.ArticleAttributeTitle),
-		expression.Name(constant.ArticleAttributeTags),
+		expression.Name(appDynamoDB.ArticleAttributePK),
+		expression.Name(appDynamoDB.ArticleAttributeStatus),
+		expression.Name(appDynamoDB.ArticleAttributePublishedAt),
+		expression.Name(appDynamoDB.ArticleAttributeTitle),
+		expression.Name(appDynamoDB.ArticleAttributeTags),
 	)
 	exp, err := expression.NewBuilder().WithKeyCondition(keyCondition).WithProjection(projection).Build()
 	if err != nil {
@@ -48,7 +47,7 @@ func (a articleRepository) FindAllForList(ctx context.Context) ([]*entity.Articl
 	// データ取得
 	result, err := a.dynamoDB.Client().Query(ctx, &dynamodb.QueryInput{
 		TableName:                 aws.String(a.appConfig.AWS.DynamoDB.TableNameArticle),
-		IndexName:                 aws.String(constant.ArticleGSIPublishedArticle),
+		IndexName:                 aws.String(appDynamoDB.ArticleGSIPublishedArticle),
 		KeyConditionExpression:    exp.KeyCondition(),
 		ProjectionExpression:      exp.Projection(),
 		ExpressionAttributeNames:  exp.Names(),
@@ -91,7 +90,7 @@ func (a articleRepository) FindByID(ctx context.Context, articleID *value.Articl
 	result, err := a.dynamoDB.Client().GetItem(ctx, &dynamodb.GetItemInput{
 		TableName: aws.String(a.appConfig.AWS.DynamoDB.TableNameArticle),
 		Key: map[string]types.AttributeValue{
-			constant.ArticleAttributePK: &types.AttributeValueMemberS{
+			appDynamoDB.ArticleAttributePK: &types.AttributeValueMemberS{
 				Value: articleID.Value(),
 			},
 		},

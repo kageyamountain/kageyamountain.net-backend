@@ -1,23 +1,23 @@
-package gateway
+package dynamodb
 
 import (
 	"context"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	awsConfig "github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
+	appconfig "github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
 )
 
-type DynamoDB struct {
+type Client struct {
 	client *dynamodb.Client
 }
 
-func NewDynamoDB(ctx context.Context, appConfig *config.AppConfig) (*DynamoDB, error) {
-	cfg, err := awsConfig.LoadDefaultConfig(ctx,
-		awsConfig.WithRegion(appConfig.AWS.DynamoDB.Region),
-		awsConfig.WithCredentialsProvider(
+func NewClient(ctx context.Context, appConfig *appconfig.AppConfig) (*Client, error) {
+	cfg, err := config.LoadDefaultConfig(ctx,
+		config.WithRegion(appConfig.AWS.DynamoDB.Region),
+		config.WithCredentialsProvider(
 			credentials.NewStaticCredentialsProvider(
 				appConfig.AWS.AccessKeyID, appConfig.AWS.SecretAccessKey, "",
 			),
@@ -31,11 +31,11 @@ func NewDynamoDB(ctx context.Context, appConfig *config.AppConfig) (*DynamoDB, e
 		o.BaseEndpoint = aws.String(appConfig.AWS.DynamoDB.EndpointURL)
 	})
 
-	return &DynamoDB{
+	return &Client{
 		client: client,
 	}, nil
 }
 
-func (d *DynamoDB) Client() *dynamodb.Client {
+func (d *Client) Client() *dynamodb.Client {
 	return d.client
 }

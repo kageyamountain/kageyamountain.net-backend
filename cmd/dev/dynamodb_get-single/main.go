@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
+	appconfig "github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository/dbmodel"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	awsConfig "github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
@@ -24,16 +24,16 @@ func main() {
 		return
 	}
 
-	appConfig, err := config.Load()
+	appConfig, err := appconfig.Load()
 	if err != nil {
 		log.Fatal("Error AppConfig Load. err:", err)
 		return
 	}
 
 	// AWS設定の読み込み
-	cfg, err := awsConfig.LoadDefaultConfig(context.TODO(),
-		awsConfig.WithRegion(appConfig.AWS.DynamoDB.Region),
-		awsConfig.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(
+	cfg, err := config.LoadDefaultConfig(context.TODO(),
+		config.WithRegion(appConfig.AWS.DynamoDB.Region),
+		config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(
 			appConfig.AWS.AccessKeyID, appConfig.AWS.SecretAccessKey, "",
 		)),
 	)

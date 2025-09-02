@@ -12,8 +12,7 @@ import (
 )
 
 const (
-	HttpHeaderXRequestID                 = "X-Request-ID"
-	HttpHeaderAccessControlExposeHeaders = "Access-Control-Expose-Headers"
+	HttpHeaderXRequestID = "X-Request-ID"
 )
 
 func Log() gin.HandlerFunc {
@@ -29,7 +28,6 @@ func Log() gin.HandlerFunc {
 
 		// レスポンスヘッダーにRequestIDをセット
 		c.Header(HttpHeaderXRequestID, requestID)
-		c.Header(HttpHeaderAccessControlExposeHeaders, HttpHeaderXRequestID)
 
 		// ログMapの設定
 		logMap := &sync.Map{}

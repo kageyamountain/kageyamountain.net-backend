@@ -26,7 +26,7 @@ func CORS(appConfig *config.AppConfig) gin.HandlerFunc {
 			"Accept",
 			"Authorization",
 		},
-		ExposeHeaders:    []string{"X-Request-ID"},
+		ExposeHeaders:    []string{HttpHeaderXRequestID},
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	})
