@@ -13,8 +13,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/entity"
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/gateway"
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository/constant"
+	appDynamoDB "github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/gateway/dynamodb"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository/dbmodel"
 	"github.com/stretchr/testify/require"
 )
@@ -23,7 +22,7 @@ func InsertTestArticles(
 	t testing.TB,
 	ctx context.Context,
 	appConfig *config.AppConfig,
-	dynamoDB *gateway.DynamoDB,
+	dynamoDB *appDynamoDB.DynamoDB,
 	articles []entity.Article,
 ) {
 	t.Helper()
@@ -61,7 +60,7 @@ func InsertTestArticles(
 	}
 }
 
-func createTestTableArticle(t testing.TB, ctx context.Context, dynamoDB *gateway.DynamoDB, tableName string) {
+func createTestTableArticle(t testing.TB, ctx context.Context, dynamoDB *appDynamoDB.DynamoDB, tableName string) {
 	t.Helper()
 
 	input := &dynamodb.CreateTableInput{
@@ -71,7 +70,7 @@ func createTestTableArticle(t testing.TB, ctx context.Context, dynamoDB *gateway
 		// KeySchema
 		KeySchema: []types.KeySchemaElement{
 			{
-				AttributeName: aws.String(constant.ArticleAttributePK),
+				AttributeName: aws.String(appDynamoDB.ArticleAttributePK),
 				KeyType:       types.KeyTypeHash,
 			},
 		},
@@ -79,23 +78,23 @@ func createTestTableArticle(t testing.TB, ctx context.Context, dynamoDB *gateway
 		// AttributeDefinitions
 		AttributeDefinitions: []types.AttributeDefinition{
 			{
-				AttributeName: aws.String(constant.ArticleAttributePK),
+				AttributeName: aws.String(appDynamoDB.ArticleAttributePK),
 				AttributeType: types.ScalarAttributeTypeS,
 			},
 			{
-				AttributeName: aws.String(constant.ArticleAttributeStatus),
+				AttributeName: aws.String(appDynamoDB.ArticleAttributeStatus),
 				AttributeType: types.ScalarAttributeTypeS,
 			},
 			{
-				AttributeName: aws.String(constant.ArticleAttributePublishedAt),
+				AttributeName: aws.String(appDynamoDB.ArticleAttributePublishedAt),
 				AttributeType: types.ScalarAttributeTypeN,
 			},
 			{
-				AttributeName: aws.String(constant.ArticleAttributePublishedYear),
+				AttributeName: aws.String(appDynamoDB.ArticleAttributePublishedYear),
 				AttributeType: types.ScalarAttributeTypeS,
 			},
 			{
-				AttributeName: aws.String(constant.ArticleAttributeCreatedAt),
+				AttributeName: aws.String(appDynamoDB.ArticleAttributeCreatedAt),
 				AttributeType: types.ScalarAttributeTypeN,
 			},
 		},
@@ -104,14 +103,14 @@ func createTestTableArticle(t testing.TB, ctx context.Context, dynamoDB *gateway
 		GlobalSecondaryIndexes: []types.GlobalSecondaryIndex{
 			// publishedArticleIndex
 			{
-				IndexName: aws.String(constant.ArticleGSIPublishedArticle),
+				IndexName: aws.String(appDynamoDB.ArticleGSIPublishedArticle),
 				KeySchema: []types.KeySchemaElement{
 					{
-						AttributeName: aws.String(constant.ArticleAttributeStatus),
+						AttributeName: aws.String(appDynamoDB.ArticleAttributeStatus),
 						KeyType:       types.KeyTypeHash,
 					},
 					{
-						AttributeName: aws.String(constant.ArticleAttributePublishedAt),
+						AttributeName: aws.String(appDynamoDB.ArticleAttributePublishedAt),
 						KeyType:       types.KeyTypeRange,
 					},
 				},
@@ -121,14 +120,14 @@ func createTestTableArticle(t testing.TB, ctx context.Context, dynamoDB *gateway
 			},
 			// draftArticleIndex
 			{
-				IndexName: aws.String(constant.ArticleGSIDraftArticle),
+				IndexName: aws.String(appDynamoDB.ArticleGSIDraftArticle),
 				KeySchema: []types.KeySchemaElement{
 					{
-						AttributeName: aws.String(constant.ArticleAttributeStatus),
+						AttributeName: aws.String(appDynamoDB.ArticleAttributeStatus),
 						KeyType:       types.KeyTypeHash,
 					},
 					{
-						AttributeName: aws.String(constant.ArticleAttributeCreatedAt),
+						AttributeName: aws.String(appDynamoDB.ArticleAttributeCreatedAt),
 						KeyType:       types.KeyTypeRange,
 					},
 				},
@@ -138,14 +137,14 @@ func createTestTableArticle(t testing.TB, ctx context.Context, dynamoDB *gateway
 			},
 			// publishedYearIndex
 			{
-				IndexName: aws.String(constant.ArticleGSIPublishedYear),
+				IndexName: aws.String(appDynamoDB.ArticleGSIPublishedYear),
 				KeySchema: []types.KeySchemaElement{
 					{
-						AttributeName: aws.String(constant.ArticleAttributePublishedYear),
+						AttributeName: aws.String(appDynamoDB.ArticleAttributePublishedYear),
 						KeyType:       types.KeyTypeHash,
 					},
 					{
-						AttributeName: aws.String(constant.ArticleAttributePublishedAt),
+						AttributeName: aws.String(appDynamoDB.ArticleAttributePublishedAt),
 						KeyType:       types.KeyTypeRange,
 					},
 				},

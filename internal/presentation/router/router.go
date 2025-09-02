@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/application/usecase"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/gateway"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/gateway/dynamodb"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/handler"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/middleware"
@@ -32,7 +32,7 @@ func Setup(ctx context.Context, appConfig *config.AppConfig) (*gin.Engine, error
 
 func initializeHandler(ctx context.Context, appConfig *config.AppConfig) (*openapi.ServerInterfaceWrapper, error) {
 	// gateway
-	dynamoDB, err := gateway.NewDynamoDB(ctx, appConfig)
+	dynamoDB, err := dynamodb.NewDynamoDB(ctx, appConfig)
 	if err != nil {
 		return nil, err
 	}

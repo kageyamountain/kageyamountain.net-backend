@@ -14,7 +14,7 @@ import (
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/entity"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value/enum"
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/gateway"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/gateway/dynamodb"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/router"
 	"github.com/kageyamountain/kageyamountain.net-backend/test/helper"
@@ -101,7 +101,7 @@ func TestArticleGet(t *testing.T) {
 					require.NoError(t, err)
 					articles = append(articles, *article)
 				}
-				dynamoDB, err := gateway.NewDynamoDB(ctx, appConfig)
+				dynamoDB, err := dynamodb.NewDynamoDB(ctx, appConfig)
 				require.NoError(t, err)
 				helper.InsertTestArticles(t, ctx, appConfig, dynamoDB, articles)
 
@@ -219,7 +219,7 @@ func TestArticleGet(t *testing.T) {
 					require.NoError(t, err)
 					articles = append(articles, *article)
 				}
-				dynamoDB, err := gateway.NewDynamoDB(ctx, appConfig)
+				dynamoDB, err := dynamodb.NewDynamoDB(ctx, appConfig)
 				require.NoError(t, err)
 				helper.InsertTestArticles(t, ctx, appConfig, dynamoDB, articles)
 
