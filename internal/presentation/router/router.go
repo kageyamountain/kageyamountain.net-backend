@@ -32,7 +32,7 @@ func Setup(ctx context.Context, appConfig *config.AppConfig) (*gin.Engine, error
 
 func initializeHandler(ctx context.Context, appConfig *config.AppConfig) (*openapi.ServerInterfaceWrapper, error) {
 	// gateway
-	dynamoDB, err := dynamodb.NewDynamoDB(ctx, appConfig)
+	dynamoDB, err := dynamodb.NewClient(ctx, appConfig)
 	if err != nil {
 		return nil, err
 	}

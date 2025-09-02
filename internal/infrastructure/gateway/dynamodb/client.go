@@ -10,11 +10,11 @@ import (
 	appconfig "github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
 )
 
-type DynamoDB struct {
+type Client struct {
 	client *dynamodb.Client
 }
 
-func NewDynamoDB(ctx context.Context, appConfig *appconfig.AppConfig) (*DynamoDB, error) {
+func NewClient(ctx context.Context, appConfig *appconfig.AppConfig) (*Client, error) {
 	cfg, err := config.LoadDefaultConfig(ctx,
 		config.WithRegion(appConfig.AWS.DynamoDB.Region),
 		config.WithCredentialsProvider(
@@ -31,11 +31,11 @@ func NewDynamoDB(ctx context.Context, appConfig *appconfig.AppConfig) (*DynamoDB
 		o.BaseEndpoint = aws.String(appConfig.AWS.DynamoDB.EndpointURL)
 	})
 
-	return &DynamoDB{
+	return &Client{
 		client: client,
 	}, nil
 }
 
-func (d *DynamoDB) Client() *dynamodb.Client {
+func (d *Client) Client() *dynamodb.Client {
 	return d.client
 }

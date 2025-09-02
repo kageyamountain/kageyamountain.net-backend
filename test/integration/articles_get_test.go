@@ -116,7 +116,7 @@ func TestArticlesGet(t *testing.T) {
 				}
 
 				// テストデータをDynamoDBへ登録
-				dynamoDB, err := dynamodb.NewDynamoDB(ctx, appConfig)
+				dynamoDB, err := dynamodb.NewClient(ctx, appConfig)
 				require.NoError(t, err)
 				helper.InsertTestArticles(t, ctx, appConfig, dynamoDB, articles)
 

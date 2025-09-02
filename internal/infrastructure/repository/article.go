@@ -18,11 +18,11 @@ import (
 )
 
 type articleRepository struct {
-	dynamoDB  *appDynamoDB.DynamoDB
+	dynamoDB  *appDynamoDB.Client
 	appConfig *config.AppConfig
 }
 
-func NewArticleRepository(dynamoDB *appDynamoDB.DynamoDB, appConfig *config.AppConfig) repository.ArticleRepository {
+func NewArticleRepository(dynamoDB *appDynamoDB.Client, appConfig *config.AppConfig) repository.ArticleRepository {
 	return &articleRepository{
 		dynamoDB:  dynamoDB,
 		appConfig: appConfig,

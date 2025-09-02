@@ -22,7 +22,7 @@ func InsertTestArticles(
 	t testing.TB,
 	ctx context.Context,
 	appConfig *config.AppConfig,
-	dynamoDB *appDynamoDB.DynamoDB,
+	dynamoDB *appDynamoDB.Client,
 	articles []entity.Article,
 ) {
 	t.Helper()
@@ -60,7 +60,7 @@ func InsertTestArticles(
 	}
 }
 
-func createTestTableArticle(t testing.TB, ctx context.Context, dynamoDB *appDynamoDB.DynamoDB, tableName string) {
+func createTestTableArticle(t testing.TB, ctx context.Context, dynamoDB *appDynamoDB.Client, tableName string) {
 	t.Helper()
 
 	input := &dynamodb.CreateTableInput{

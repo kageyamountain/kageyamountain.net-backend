@@ -101,7 +101,7 @@ func TestArticleGet(t *testing.T) {
 					require.NoError(t, err)
 					articles = append(articles, *article)
 				}
-				dynamoDB, err := dynamodb.NewDynamoDB(ctx, appConfig)
+				dynamoDB, err := dynamodb.NewClient(ctx, appConfig)
 				require.NoError(t, err)
 				helper.InsertTestArticles(t, ctx, appConfig, dynamoDB, articles)
 
@@ -219,7 +219,7 @@ func TestArticleGet(t *testing.T) {
 					require.NoError(t, err)
 					articles = append(articles, *article)
 				}
-				dynamoDB, err := dynamodb.NewDynamoDB(ctx, appConfig)
+				dynamoDB, err := dynamodb.NewClient(ctx, appConfig)
 				require.NoError(t, err)
 				helper.InsertTestArticles(t, ctx, appConfig, dynamoDB, articles)
 
