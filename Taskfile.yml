@@ -13,7 +13,7 @@ tasks:
       - cmd: air
         platforms: [linux, darwin]
       - cmd: air -c .air.windows.toml
-        platforms: [ windows ]
+        platforms: [windows]
 
   # docker
   compose-up:
@@ -46,13 +46,13 @@ tasks:
     desc: lint実行
     silent: true
     cmds:
-      - go tool golangci-lint run
+      - golangci-lint run
 
   lint-fix:
     desc: lint-fix実行
     silent: true
     cmds:
-      - go tool golangci-lint run --fix
+      - golangci-lint run --fix
 
   # fmt
   fmt:
