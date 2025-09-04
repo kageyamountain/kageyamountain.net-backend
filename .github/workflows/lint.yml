@@ -9,7 +9,7 @@ on:
       - develop
 
 jobs:
-  golangci:
+  lint:
     name: lint
     runs-on: ubuntu-latest
     steps:
@@ -25,4 +25,4 @@ jobs:
       - name: lint実行
         uses: golangci/golangci-lint-action@v8
         with:
-          version: v2.3.1
+          version: v2.4.0
