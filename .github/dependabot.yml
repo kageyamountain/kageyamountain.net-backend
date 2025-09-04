@@ -25,3 +25,16 @@ updates:
       - "kageyamountain"
     assignees:
       - "kageyamountain"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      time: "20:00"
+      timezone: "Asia/Tokyo"
+    open-pull-requests-limit: 20
+    reviewers:
+      - "kageyamountain"
+    assignees:
+      - "kageyamountain"
