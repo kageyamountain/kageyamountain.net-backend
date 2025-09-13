@@ -10,9 +10,9 @@ tasks:
     env:
       ENV: dev
     cmds:
-      - cmd: air
+      - cmd: go tool air
         platforms: [linux, darwin]
-      - cmd: air -c .air.windows.toml
+      - cmd: go tool air -c .air.windows.toml
         platforms: [windows]
 
   # docker
