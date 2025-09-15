@@ -12,6 +12,8 @@ updates:
       - "kageyamountain"
     assignees:
       - "kageyamountain"
+    labels:
+      - "dependencies"
 
   # Docker
   - package-ecosystem: "docker"
@@ -25,6 +27,8 @@ updates:
       - "kageyamountain"
     assignees:
       - "kageyamountain"
+    labels:
+      - "dependencies"
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
@@ -38,3 +42,5 @@ updates:
       - "kageyamountain"
     assignees:
       - "kageyamountain"
+    labels:
+      - "dependencies"
