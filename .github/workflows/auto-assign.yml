@@ -1,4 +1,4 @@
-# IssueとPull Requestの作成時に自動で作成者をアサインする
+# IssueとPull Requestの作成時に作成者をassigneeに設定する
 name: auto-assign
 
 on:
@@ -18,14 +18,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 1
     steps:
-      - name: Auto assign issue to creator
+      - name: issuesの作成者をassigneeに設定
         if: github.event_name == 'issues'
         run: gh issue edit ${{ github.event.issue.number }} --add-assignee ${{ github.actor }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
 
-      - name: Auto assign PR to creator
+      - name: PRの作成者をassigneeに設定
         if: github.event_name == 'pull_request'
         run: gh pr edit ${{ github.event.number }} --add-assignee ${{ github.actor }}
         env:
