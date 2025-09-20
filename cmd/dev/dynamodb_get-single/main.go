@@ -82,6 +82,7 @@ func main() {
 	fmt.Printf("パーティションキー: %s\n", article.PK)
 	fmt.Printf("ステータス: %s\n", article.Status)
 	fmt.Printf("作成日: %d\n", article.CreatedAt)
+	fmt.Printf("更新日: %d\n", article.UpdatedAt)
 	fmt.Printf("公開日: %d\n", article.PublishedAt)
 	fmt.Printf("公開年: %s\n", article.PublishedYear)
 	fmt.Printf("件名: %s\n", article.Title)

@@ -12,6 +12,7 @@ type Article struct {
 	ID            value.ArticleID
 	Status        enum.Status
 	CreatedAt     time.Time
+	UpdatedAt     time.Time
 	PublishedAt   time.Time
 	PublishedYear string
 	Title         string
@@ -23,6 +24,7 @@ type NewArticleInput struct {
 	ID            string
 	Status        string
 	CreatedAt     time.Time
+	UpdatedAt     time.Time
 	PublishedAt   time.Time
 	PublishedYear string
 	Title         string
@@ -58,6 +60,7 @@ func NewArticle(input *NewArticleInput) (*Article, error) {
 		ID:            *articleID,
 		Status:        status,
 		CreatedAt:     input.CreatedAt,
+		UpdatedAt:     input.UpdatedAt,
 		PublishedAt:   input.PublishedAt,
 		PublishedYear: input.PublishedYear,
 		Title:         input.Title,

@@ -115,6 +115,7 @@ func (a articleRepository) FindByID(ctx context.Context, articleID *value.Articl
 	domainModel, err := entity.NewArticle(&entity.NewArticleInput{
 		ID:          dbModel.PK,
 		Status:      dbModel.Status,
+		UpdatedAt:   time.Unix(dbModel.UpdatedAt, 0).UTC(),
 		PublishedAt: time.Unix(dbModel.PublishedAt, 0).UTC(),
 		Title:       dbModel.Title,
 		Contents:    dbModel.Contents,

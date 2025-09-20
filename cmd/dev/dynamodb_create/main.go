@@ -50,8 +50,7 @@ func main() {
 		o.BaseEndpoint = aws.String(appConfig.AWS.DynamoDB.EndpointURL)
 	})
 
-	contents := `
-# 見出し1
+	contents := `# 見出し1
 ## 見出し1-1
 - aaa
 - bbb
@@ -63,6 +62,7 @@ func main() {
 		PK:            "a87ff679a2f3e71d9181a67b7542122c",
 		Status:        "publish",
 		CreatedAt:     1691575800, // 2024-08-09T15:30:00Z
+		UpdatedAt:     1691575800, // 2024-08-09T15:30:00Z
 		PublishedAt:   1691575800, // 2024-08-09T15:30:00Z
 		PublishedYear: "2024",
 		Title:         "サンプルタイトル",

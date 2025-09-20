@@ -5,6 +5,7 @@ const (
 	ArticleAttributePK            = "pk"
 	ArticleAttributeStatus        = "status"
 	ArticleAttributeCreatedAt     = "createdAt"
+	ArticleAttributeUpdatedAt     = "updatedAt"
 	ArticleAttributePublishedAt   = "publishedAt"
 	ArticleAttributePublishedYear = "publishedYear"
 	ArticleAttributeTitle         = "title"

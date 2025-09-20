@@ -80,7 +80,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Article'
+                $ref: '#/components/schemas/ArticleGetResponseBody'
         '404':
           description: 指定IDの記事が存在しない場合
           headers:
@@ -122,6 +122,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Article'
+    ArticleGetResponseBody:
+      type: object
+      required:
+        - article
+      properties:
+        article:
+          $ref: '#/components/schemas/Article'
 
     Article:
       type: object
@@ -135,6 +142,11 @@ components:
           type: string
           description: 記事ID（ハイフン無しのUUIDv4形式）
           example: "123e4567e89b12d3a456426655440000"
+        updated_at:
+          type: string
+          format: date-time
+          description: 更新日時（UTC）
+          example: "2025-01-15T12:00:00Z"
         published_at:
           type: string
           format: date-time

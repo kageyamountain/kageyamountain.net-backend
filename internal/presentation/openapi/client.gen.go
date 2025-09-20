@@ -294,7 +294,7 @@ func (r ArticlesGetResponse) StatusCode() int {
 type ArticleGetResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *Article
+	JSON200      *ArticleGetResponseBody
 	JSON404      *Error
 	JSON500      *Error
 }
@@ -381,7 +381,7 @@ func ParseArticleGetResponse(rsp *http.Response) (*ArticleGetResponse, error) {
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest Article
+		var dest ArticleGetResponseBody
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
