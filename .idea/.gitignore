@@ -21,3 +21,6 @@
 
 # その他の個人設定
 /git_toolbox_prj.xml
+
+# copilot
+/copilot.data.migration.*
