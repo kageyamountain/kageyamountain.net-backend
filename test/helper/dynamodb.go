@@ -46,8 +46,8 @@ func InsertTestArticles(
 			Contents:      articles[i].Contents,
 			Tags:          make([]string, len(articles[i].Tags)),
 		}
-		for i, tag := range articles[i].Tags {
-			dbModel.Tags[i] = tag.String()
+		for j, tag := range articles[i].Tags {
+			dbModel.Tags[j] = tag.String()
 		}
 
 		item, err := attributevalue.MarshalMap(dbModel)
