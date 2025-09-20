@@ -29,6 +29,14 @@ type Article struct {
 
 	// Title 記事タイトル
 	Title string `json:"title"`
+
+	// UpdatedAt 更新日時（UTC）
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+}
+
+// ArticleGetResponseBody defines model for ArticleGetResponseBody.
+type ArticleGetResponseBody struct {
+	Article Article `json:"article"`
 }
 
 // ArticlesGetResponseBody defines model for ArticlesGetResponseBody.

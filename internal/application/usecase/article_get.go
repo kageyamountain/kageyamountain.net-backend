@@ -25,6 +25,7 @@ func NewArticleUseCase(articleRepository repository.ArticleRepository) ArticleGe
 
 type ArticleGetUseCaseOutput struct {
 	ID          string
+	UpdatedAt   time.Time
 	PublishedAt time.Time
 	Title       string
 	Contents    string
@@ -59,6 +60,7 @@ func (a *articleGetUseCase) Execute(ctx context.Context, inputArticleID string) 
 func (a *articleGetUseCase) convertToOutput(article *entity.Article) *ArticleGetUseCaseOutput {
 	output := &ArticleGetUseCaseOutput{
 		ID:          article.ID.Value(),
+		UpdatedAt:   article.UpdatedAt,
 		PublishedAt: article.PublishedAt,
 		Title:       article.Title,
 		Contents:    article.Contents,

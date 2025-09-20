@@ -4,6 +4,7 @@ type Article struct {
 	PK            string   `dynamodbav:"pk"`
 	Status        string   `dynamodbav:"status"`
 	CreatedAt     int64    `dynamodbav:"createdAt"`
+	UpdatedAt     int64    `dynamodbav:"updatedAt"`
 	PublishedAt   int64    `dynamodbav:"publishedAt"`
 	PublishedYear string   `dynamodbav:"publishedYear"`
 	Title         string   `dynamodbav:"title"`

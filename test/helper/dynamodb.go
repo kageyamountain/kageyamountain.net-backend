@@ -39,6 +39,7 @@ func InsertTestArticles(
 			PK:            articles[i].ID.Value(),
 			Status:        articles[i].Status.String(),
 			CreatedAt:     articles[i].CreatedAt.Unix(),
+			UpdatedAt:     articles[i].UpdatedAt.Unix(),
 			PublishedAt:   articles[i].PublishedAt.Unix(),
 			PublishedYear: articles[i].PublishedYear,
 			Title:         articles[i].Title,
