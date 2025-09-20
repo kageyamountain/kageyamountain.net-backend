@@ -75,7 +75,7 @@ func TestNewArticle(t *testing.T) {
 					ID:            *wantID,
 					Status:        tt.wantStatus,
 					CreatedAt:     tt.input.CreatedAt,
-					UpdatedAt:     tt.input.CreatedAt,
+					UpdatedAt:     tt.input.UpdatedAt,
 					PublishedAt:   tt.input.PublishedAt,
 					PublishedYear: tt.input.PublishedYear,
 					Title:         tt.input.Title,
