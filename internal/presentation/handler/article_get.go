@@ -44,12 +44,12 @@ func (a *ArticleGetHandler) ArticleGet(c *gin.Context, articleId string) {
 	}
 
 	c.JSON(http.StatusOK, &openapi.ArticleGetResponseBody{
-		Article: openapi.Article{
+		Article: openapi.ArticleDetail{
 			Id:          useCaseOutput.ID,
-			UpdatedAt:   &useCaseOutput.UpdatedAt,
+			UpdatedAt:   useCaseOutput.UpdatedAt,
 			PublishedAt: useCaseOutput.PublishedAt,
 			Title:       useCaseOutput.Title,
-			Contents:    &useCaseOutput.Contents,
+			Contents:    useCaseOutput.Contents,
 			Tags:        useCaseOutput.Tags,
 		},
 	})

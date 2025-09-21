@@ -13,35 +13,68 @@ const (
 	NotFound            ErrorCode = "not_found"
 )
 
-// Article defines model for Article.
-type Article struct {
+// ArticleContents 記事内容（マークダウン形式）
+type ArticleContents = string
+
+// ArticleDetail defines model for ArticleDetail.
+type ArticleDetail struct {
 	// Contents 記事内容（マークダウン形式）
-	Contents *string `json:"contents,omitempty"`
+	Contents ArticleContents `json:"contents"`
 
 	// Id 記事ID（ハイフン無しのUUIDv4形式）
-	Id string `json:"id"`
+	Id ArticleId `json:"id"`
 
 	// PublishedAt 公開日時（UTC）
-	PublishedAt time.Time `json:"published_at"`
+	PublishedAt ArticlePublishedAt `json:"published_at"`
 
 	// Tags タグ
-	Tags []string `json:"tags"`
+	Tags ArticleTags `json:"tags"`
 
 	// Title 記事タイトル
-	Title string `json:"title"`
+	Title ArticleTitle `json:"title"`
 
 	// UpdatedAt 更新日時（UTC）
-	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	UpdatedAt ArticleUpdatedAt `json:"updated_at"`
 }
 
 // ArticleGetResponseBody defines model for ArticleGetResponseBody.
 type ArticleGetResponseBody struct {
-	Article Article `json:"article"`
+	Article ArticleDetail `json:"article"`
 }
+
+// ArticleId 記事ID（ハイフン無しのUUIDv4形式）
+type ArticleId = string
+
+// ArticlePublishedAt 公開日時（UTC）
+type ArticlePublishedAt = time.Time
+
+// ArticleSummary defines model for ArticleSummary.
+type ArticleSummary struct {
+	// Id 記事ID（ハイフン無しのUUIDv4形式）
+	Id ArticleId `json:"id"`
+
+	// PublishedAt 公開日時（UTC）
+	PublishedAt ArticlePublishedAt `json:"published_at"`
+
+	// Tags タグ
+	Tags ArticleTags `json:"tags"`
+
+	// Title 記事タイトル
+	Title ArticleTitle `json:"title"`
+}
+
+// ArticleTags タグ
+type ArticleTags = []string
+
+// ArticleTitle 記事タイトル
+type ArticleTitle = string
+
+// ArticleUpdatedAt 更新日時（UTC）
+type ArticleUpdatedAt = time.Time
 
 // ArticlesGetResponseBody defines model for ArticlesGetResponseBody.
 type ArticlesGetResponseBody struct {
-	Articles []Article `json:"articles"`
+	Articles []ArticleSummary `json:"articles"`
 }
 
 // Error defines model for Error.

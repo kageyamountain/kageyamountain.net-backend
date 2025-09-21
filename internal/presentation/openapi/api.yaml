@@ -113,6 +113,7 @@ components:
       description: リクエストID（UUIDv4形式）
       example: "123e4567-e89b-12d3-a456-426614174000"
 
+    # APIレスポンス
     ArticlesGetResponseBody:
       type: object
       required:
@@ -121,16 +122,17 @@ components:
         articles:
           type: array
           items:
-            $ref: '#/components/schemas/Article'
+            $ref: '#/components/schemas/ArticleSummary'
     ArticleGetResponseBody:
       type: object
       required:
         - article
       properties:
         article:
-          $ref: '#/components/schemas/Article'
+          $ref: '#/components/schemas/ArticleDetail'
 
-    Article:
+    # Article
+    ArticleSummary:
       type: object
       required:
         - id
@@ -139,39 +141,72 @@ components:
         - tags
       properties:
         id:
-          type: string
-          description: 記事ID（ハイフン無しのUUIDv4形式）
-          example: "123e4567e89b12d3a456426655440000"
-        updated_at:
-          type: string
-          format: date-time
-          description: 更新日時（UTC）
-          example: "2025-01-15T12:00:00Z"
+          $ref: '#/components/schemas/ArticleId'
         published_at:
-          type: string
-          format: date-time
-          description: 公開日時（UTC）
-          example: "2025-01-15T12:00:00Z"
+          $ref: '#/components/schemas/ArticlePublishedAt'
         title:
-          type: string
-          description: 記事タイトル
-          example: "Go言語入門"
-        contents:
-          type: string
-          description: 記事内容（マークダウン形式）
-          example: |
-            # 入門チャプター
-            - 標準出力
-            - 変数と定数
-            - 条件分岐
-            - ループ
+          $ref: '#/components/schemas/ArticleTitle'
         tags:
-          type: array
-          items:
-            type: string
-          description: タグ
-          example: ["Go", "JavaScript", "AWS"]
+          $ref: '#/components/schemas/ArticleTags'
+    ArticleDetail:
+      type: object
+      required:
+        - id
+        - published_at
+        - updated_at
+        - title
+        - contents
+        - tags
+      properties:
+        id:
+          $ref: '#/components/schemas/ArticleId'
+        published_at:
+          $ref: '#/components/schemas/ArticlePublishedAt'
+        updated_at:
+          $ref: '#/components/schemas/ArticleUpdatedAt'
+        title:
+          $ref: '#/components/schemas/ArticleTitle'
+        contents:
+          $ref: '#/components/schemas/ArticleContents'
+        tags:
+          $ref: '#/components/schemas/ArticleTags'
 
+    # Articleプロパティ
+    ArticleId:
+      type: string
+      description: 記事ID（ハイフン無しのUUIDv4形式）
+      example: "123e4567e89b12d3a456426655440000"
+    ArticleTitle:
+      type: string
+      description: 記事タイトル
+      example: "Go言語入門"
+    ArticleContents:
+      type: string
+      description: 記事内容（マークダウン形式）
+      example: |
+        # 入門チャプター
+        - 標準出力
+        - 変数と定数
+        - 条件分岐
+        - ループ
+    ArticlePublishedAt:
+      type: string
+      format: date-time
+      description: 公開日時（UTC）
+      example: "2025-01-15T12:00:00Z"
+    ArticleUpdatedAt:
+      type: string
+      format: date-time
+      description: 更新日時（UTC）
+      example: "2025-01-15T12:00:00Z"
+    ArticleTags:
+      type: array
+      items:
+        type: string
+      description: タグ
+      example: [ "Go", "JavaScript", "AWS" ]
+
+    # エラー定義
     Error:
       type: object
       required:
