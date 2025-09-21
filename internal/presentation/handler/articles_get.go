@@ -37,9 +37,9 @@ func (a *ArticlesGetHandler) ArticlesGet(c *gin.Context, params openapi.Articles
 	}
 
 	// レスポンスボディの型へ変換
-	var articles []openapi.Article
+	var articles []openapi.ArticleSummary
 	for _, article := range useCaseOutput.Articles {
-		articles = append(articles, openapi.Article{
+		articles = append(articles, openapi.ArticleSummary{
 			Id:          article.ID,
 			PublishedAt: article.PublishedAt,
 			Title:       article.Title,

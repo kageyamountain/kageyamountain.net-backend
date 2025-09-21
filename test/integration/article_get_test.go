@@ -130,12 +130,12 @@ func TestArticleGet(t *testing.T) {
 
 				// Assert
 				wantResponseBody := openapi.ArticleGetResponseBody{
-					Article: openapi.Article{
+					Article: openapi.ArticleDetail{
 						Id:          tt.testArticleInputs[0].ID,
-						UpdatedAt:   &tt.testArticleInputs[0].UpdatedAt,
+						UpdatedAt:   tt.testArticleInputs[0].UpdatedAt,
 						PublishedAt: tt.testArticleInputs[0].PublishedAt,
 						Title:       tt.testArticleInputs[0].Title,
-						Contents:    &tt.testArticleInputs[0].Contents,
+						Contents:    tt.testArticleInputs[0].Contents,
 						Tags:        tt.testArticleInputs[0].Tags,
 					},
 				}

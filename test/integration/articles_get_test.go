@@ -95,7 +95,7 @@ func TestArticlesGet(t *testing.T) {
 
 				// テストデータ作成
 				var articles []entity.Article
-				var wantArticles []openapi.Article
+				var wantArticles []openapi.ArticleSummary
 				for _, testArticleInput := range tt.testArticleInputs {
 					// DynamoDB登録用のEntity作成
 					article, err := entity.NewArticle(&testArticleInput)
@@ -107,7 +107,7 @@ func TestArticlesGet(t *testing.T) {
 					if testArticleInput.Status != enum.StatusPublish.String() {
 						continue
 					}
-					wantArticles = append(wantArticles, openapi.Article{
+					wantArticles = append(wantArticles, openapi.ArticleSummary{
 						Id:          testArticleInput.ID,
 						PublishedAt: testArticleInput.PublishedAt,
 						Title:       testArticleInput.Title,
