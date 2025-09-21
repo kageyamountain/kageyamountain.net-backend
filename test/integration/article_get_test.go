@@ -129,16 +129,18 @@ func TestArticleGet(t *testing.T) {
 				})
 
 				// Assert
-				wantResponseBody := openapi.Article{
-					Id:          tt.testArticleInputs[0].ID,
-					UpdatedAt:   &tt.testArticleInputs[0].UpdatedAt,
-					PublishedAt: tt.testArticleInputs[0].PublishedAt,
-					Title:       tt.testArticleInputs[0].Title,
-					Contents:    &tt.testArticleInputs[0].Contents,
-					Tags:        tt.testArticleInputs[0].Tags,
+				wantResponseBody := openapi.ArticleGetResponseBody{
+					Article: openapi.Article{
+						Id:          tt.testArticleInputs[0].ID,
+						UpdatedAt:   &tt.testArticleInputs[0].UpdatedAt,
+						PublishedAt: tt.testArticleInputs[0].PublishedAt,
+						Title:       tt.testArticleInputs[0].Title,
+						Contents:    &tt.testArticleInputs[0].Contents,
+						Tags:        tt.testArticleInputs[0].Tags,
+					},
 				}
 
-				var decodedGotResponseBody openapi.Article
+				var decodedGotResponseBody openapi.ArticleGetResponseBody
 				err = json.NewDecoder(gotResponse.Body).Decode(&decodedGotResponseBody)
 				require.NoError(t, err)
 
