@@ -1,20 +1,6 @@
-# https://taskfile.dev
-
 version: '3'
 
 tasks:
-  # build
-  dev:
-    desc: 開発サーバー起動
-    silent: true
-    env:
-      ENV: dev
-    cmds:
-      - cmd: go tool air
-        platforms: [linux, darwin]
-      - cmd: go tool air -c .air.windows.toml
-        platforms: [windows]
-
   # docker
   compose-up:
     desc: 開発用コンテナ起動
@@ -33,26 +19,26 @@ tasks:
     desc: テスト実行（失敗テストのみ表示）
     silent: true
     cmds:
-      - go test -cover -race ./...
+      - docker-compose exec kageyamountain-net-api go test -cover -race ./...
 
   test-display-all:
     desc: テスト実行（全テスト結果表示）
     silent: true
     cmds:
-      - go test -v -cover -race ./...
+      - docker-compose exec kageyamountain-net-api go test -v -cover -race ./...
 
   # lint
   lint:
     desc: lint実行
     silent: true
     cmds:
-      - golangci-lint run
+      - docker-compose exec kageyamountain-net-api golangci-lint run
 
   lint-fix:
     desc: lint-fix実行
     silent: true
     cmds:
-      - golangci-lint run --fix
+      - docker-compose exec kageyamountain-net-api golangci-lint run --fix
 
   # fmt
   fmt:
@@ -66,7 +52,7 @@ tasks:
     desc: .env.devのAppConfigマッピングを確認
     silent: true
     cmds:
-      - go run ./cmd/dev/appconfig/main.go
+      - docker-compose exec kageyamountain-net-api go run ./cmd/dev/appconfig/main.go
 
   # DynamoDB local
   table-create:

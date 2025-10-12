@@ -1,9 +1,9 @@
-version: '3.8'
+name: kageyamountain-net
+
 services:
   dynamodb:
     command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
     image: "amazon/dynamodb-local:latest"
-    container_name: dynamodb-local
     ports:
       - "8000:8000"
     volumes:
@@ -15,6 +15,31 @@ services:
     ports:
       - "8001:8001"
     environment:
-      DYNAMO_ENDPOINT: "http://dynamodb-local:8000"
+      DYNAMO_ENDPOINT: "http://dynamodb:8000"
     depends_on:
       - dynamodb
+
+  kageyamountain-net-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: dev
+    environment:
+      ENV: dev
+      TZ: Asia/Tokyo
+      CGO_ENABLED: 1
+    volumes:
+      - .:/app
+    ports:
+      - "8080:8080" # アプリケーション用ポート
+      - "2345:2345" # delveリモートデバッグ用ポート
+    env_file:
+      - .env.dev
+    depends_on:
+      - dynamodb
+    stdin_open: true
+    tty: true
+    security_opt:
+      - seccomp:unconfined
+    cap_add:
+      - SYS_PTRACE

@@ -1,5 +1,4 @@
 [tools]
 act = "latest"
 go = "1.24.6"
-golangci-lint = "2.4.0"
 task = "latest"
