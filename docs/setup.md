@@ -31,6 +31,5 @@ go mod tidy
 ## ローカル開発環境の起動方法
 ```shell
 task compose-up
-task dev
 ```
 基本的なコマンドは `task` コマンドで用意しているので [Taskfile.yml](https://github.com/kageyamountain/kageyamountain.net-backend/blob/main/Taskfile.yml) 参照
