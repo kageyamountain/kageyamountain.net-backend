@@ -10,7 +10,7 @@ import (
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/handler"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/middleware"
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi"
+	openapi "github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi/v1"
 )
 
 func Setup(ctx context.Context, appConfig *config.AppConfig) (*gin.Engine, error) {
@@ -24,20 +24,21 @@ func Setup(ctx context.Context, appConfig *config.AppConfig) (*gin.Engine, error
 	r.Use(middleware.CORS(appConfig))
 	r.Use(middleware.Log())
 
-	r.GET("/articles", siw.ArticlesGet)            // 記事一覧
-	r.GET("/articles/:article-id", siw.ArticleGet) // 記事詳細
+	v1 := r.Group("/v1")
+	v1.GET("/articles", siw.ArticlesGet)            // 記事一覧
+	v1.GET("/articles/:article-id", siw.ArticleGet) // 記事詳細
 
 	return r, nil
 }
 
 func initializeHandler(ctx context.Context, appConfig *config.AppConfig) (*openapi.ServerInterfaceWrapper, error) {
-	// gateway
+	// Gateway
 	dynamoDB, err := dynamodb.NewClient(ctx, appConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	// repository
+	// Repository
 	articleRepository := repository.NewArticleRepository(dynamoDB, appConfig)
 
 	// UseCase

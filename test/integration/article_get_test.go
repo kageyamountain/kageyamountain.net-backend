@@ -15,7 +15,7 @@ import (
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value/enum"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/gateway/dynamodb"
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi"
+	openapi "github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi/v1"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/router"
 	"github.com/kageyamountain/kageyamountain.net-backend/test/helper"
 	"github.com/stretchr/testify/assert"
@@ -116,7 +116,7 @@ func TestArticleGet(t *testing.T) {
 				t.Cleanup(func() { testServer.Close() })
 
 				// リクエストの作成（1つめのテストデータを取得）
-				req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/articles/%s", testServer.URL, tt.testArticleInputs[0].ID), http.NoBody)
+				req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/v1/articles/%s", testServer.URL, tt.testArticleInputs[0].ID), http.NoBody)
 				require.NoError(t, err)
 
 				// Act
@@ -240,7 +240,7 @@ func TestArticleGet(t *testing.T) {
 				t.Cleanup(func() { testServer.Close() })
 
 				// リクエストの作成（3つめのテストデータを取得）
-				req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/articles/%s", testServer.URL, tt.testArticleInputs[2].ID), http.NoBody)
+				req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/v1/articles/%s", testServer.URL, tt.testArticleInputs[2].ID), http.NoBody)
 				require.NoError(t, err)
 
 				// Act
