@@ -46,7 +46,7 @@ func main() {
 	}
 
 	// Webサーバーの起動
-	err = r.Run("localhost:8080")
+	err = r.Run("0.0.0.0:8080")
 	if err != nil {
 		slog.Error("failed to run server.", slog.Any("err", err))
 		return
