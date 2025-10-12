@@ -3,7 +3,6 @@ version: "2"
 run:
   timeout: 5m
   tests: true
-  concurrency: 8
 
 output:
   formats:
@@ -26,14 +25,15 @@ linters:
   default: none  # 全て無効化してから個別に有効化する
   enable:
     - errcheck      # エラーハンドリング
+    - gocritic      # 詳細なコード分析
+    - gocyclo       # サイクロマティック複雑度分析（循環的複雑度）
+    - gosec         # セキュリティチェック
     - govet         # go vet相当
     - ineffassign   # 無効な代入
+    - misspell      # スペルミス
+    - revive        # golintの後継
     - staticcheck   # 静的解析
     - unused        # 未使用コード
-    - misspell      # スペルミス
-    - gocritic      # 詳細なコード分析
-    - revive        # golintの後継
-    - gosec         # セキュリティチェック
 
   settings:
     errcheck:
@@ -48,7 +48,9 @@ linters:
       disabled-checks:
         - commentedOutCode
 
-    # revive設定
+    gocyclo:
+      min-complexity: 15
+
     revive:
       rules:
         - name: package-comments

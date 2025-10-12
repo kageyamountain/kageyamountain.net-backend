@@ -106,9 +106,11 @@ tasks:
     desc: OpenAPI定義書YAMLからGoコードを生成
     silent: false
     preconditions:
-      - test -f internal/presentation/openapi/api.yaml
+      - test -f internal/presentation/openapi/v1/api.yaml
     cmds:
-      - rm -f internal/presentation/openapi/*.gen.go
-      - go tool oapi-codegen -generate types -package openapi -o internal/presentation/openapi/types.gen.go internal/presentation/openapi/api.yaml
-      - go tool oapi-codegen -generate gin -package openapi -o internal/presentation/openapi/handler.gen.go internal/presentation/openapi/api.yaml
-      - go tool oapi-codegen -generate client -package openapi -o internal/presentation/openapi/client.gen.go internal/presentation/openapi/api.yaml
+      # 既存の生成コードを削除
+      - rm -f internal/presentation/openapi/*/*.gen.go
+      # v1生成
+      - go tool oapi-codegen -generate types -package v1 -o internal/presentation/openapi/v1/types.gen.go internal/presentation/openapi/v1/api.yaml
+      - go tool oapi-codegen -generate gin -package v1 -o internal/presentation/openapi/v1/handler.gen.go internal/presentation/openapi/v1/api.yaml
+      - go tool oapi-codegen -generate client -package v1 -o internal/presentation/openapi/v1/client.gen.go internal/presentation/openapi/v1/api.yaml
