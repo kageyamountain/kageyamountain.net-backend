@@ -11,9 +11,9 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.39.2
 	github.com/aws/aws-sdk-go-v2/config v1.31.12
 	github.com/aws/aws-sdk-go-v2/credentials v1.18.16
-	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.20.13
+	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.20.14
 	github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression v1.8.13
-	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.50.5
+	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.51.0
 	github.com/gin-contrib/cors v1.7.6
 	github.com/gin-gonic/gin v1.11.0
 	github.com/google/uuid v1.6.0
