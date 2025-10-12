@@ -4,10 +4,13 @@ updates:
   - package-ecosystem: "gomod"
     directory: "/"
     schedule:
-      interval: "monthly"
-      time: "20:00"
+      interval: "weekly"
+      day: "friday"
+      time: "21:00"
       timezone: "Asia/Tokyo"
     open-pull-requests-limit: 20
+    cooldown:
+      default-days: 7
     reviewers:
       - "kageyamountain"
     assignees:
@@ -19,10 +22,13 @@ updates:
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
-      interval: "monthly"
-      time: "20:00"
+      interval: "weekly"
+      day: "friday"
+      time: "21:00"
       timezone: "Asia/Tokyo"
     open-pull-requests-limit: 20
+    cooldown:
+      default-days: 7
     reviewers:
       - "kageyamountain"
     assignees:
@@ -34,10 +40,13 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "monthly"
-      time: "20:00"
+      interval: "weekly"
+      day: "friday"
+      time: "21:00"
       timezone: "Asia/Tokyo"
     open-pull-requests-limit: 20
+    cooldown:
+      default-days: 7
     reviewers:
       - "kageyamountain"
     assignees:
