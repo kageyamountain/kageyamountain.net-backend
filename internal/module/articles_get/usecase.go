@@ -33,16 +33,16 @@ type UseCaseOutputRow struct {
 	Tags        []string
 }
 
-func (a *useCase) Execute(ctx context.Context) (*UseCaseOutput, error) {
-	articlesEntity, err := a.articleRepository.FindAllForList(ctx)
+func (u *useCase) Execute(ctx context.Context) (*UseCaseOutput, error) {
+	articlesEntity, err := u.articleRepository.FindAllForList(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return a.convertToOutput(articlesEntity), nil
+	return u.convertToOutput(articlesEntity), nil
 }
 
-func (a *useCase) convertToOutput(articles []*entity.Article) *UseCaseOutput {
+func (u *useCase) convertToOutput(articles []*entity.Article) *UseCaseOutput {
 	var output UseCaseOutput
 	for _, article := range articles {
 		outputRow := &UseCaseOutputRow{

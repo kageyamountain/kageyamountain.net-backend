@@ -19,13 +19,13 @@ func NewHandler(useCase UseCase) *Handler {
 }
 
 // GET /articles エンドポイント
-func (a *Handler) ArticlesGet(c *gin.Context, params openapi.ArticlesGetParams) {
+func (h *Handler) ArticlesGet(c *gin.Context, params openapi.ArticlesGetParams) {
 	ctx := c.Request.Context()
 
 	// TODO リクエストパラメータを利用した公開年とタグのフィルタリング機能実装
 
 	// ユースケースの実行
-	useCaseOutput, err := a.useCase.Execute(ctx)
+	useCaseOutput, err := h.useCase.Execute(ctx)
 	if err != nil {
 		slog.Error("failed to ArticlesGet use case", slog.Any("err", err))
 		c.AbortWithStatusJSON(http.StatusInternalServerError, openapi.Error{
