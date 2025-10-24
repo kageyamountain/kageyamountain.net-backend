@@ -6,7 +6,7 @@ RUN apk add --no-cache \
     musl-dev \
     git
 RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | \
-    sh -s -- -b $(go env GOPATH)/bin v2.4.0
+    sh -s -- -b $(go env GOPATH)/bin v2.5.0
 RUN go install github.com/air-verse/air@latest && \
     go install github.com/go-delve/delve/cmd/dlv@latest
 WORKDIR /app
