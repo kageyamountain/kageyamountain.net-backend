@@ -5,10 +5,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/feature/article_get"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/feature/articles_get"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/gateway/dynamodb"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository"
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/module/article_get"
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/module/articles_get"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/middleware"
 	openapi "github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi/v1"
 )
@@ -32,16 +32,16 @@ func Setup(ctx context.Context, appConfig *config.AppConfig) (*gin.Engine, error
 }
 
 func initializeHandler(ctx context.Context, appConfig *config.AppConfig) (*openapi.ServerInterfaceWrapper, error) {
-	// Gateway
+	// gateway
 	dynamoDB, err := dynamodb.NewClient(ctx, appConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	// Repository
+	// repository
 	articleRepository := repository.NewArticleRepository(dynamoDB, appConfig)
 
-	// module
+	// feature
 	articlesUseCase := articles_get.NewUseCase(articleRepository)
 	articlesGetHandler := articles_get.NewHandler(articlesUseCase)
 
