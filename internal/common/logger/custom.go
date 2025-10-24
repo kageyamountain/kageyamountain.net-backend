@@ -34,8 +34,8 @@ func (h *AppLogHandler) Handle(ctx context.Context, r slog.Record) error { //nol
 	if ok {
 		// ログMapの全エントリをログに追加
 		logMap.Range(func(key, value interface{}) bool {
-			keyStr, ok := key.(string)
-			if ok {
+			keyStr, ok2 := key.(string)
+			if ok2 {
 				r.AddAttrs(slog.Attr{Key: keyStr, Value: slog.AnyValue(value)})
 			}
 			return true // 継続

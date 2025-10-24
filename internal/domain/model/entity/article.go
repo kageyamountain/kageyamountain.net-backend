@@ -51,9 +51,9 @@ func NewArticle(input *NewArticleInput) (*Article, error) {
 	if len(input.Tags) > 0 {
 		tags = make([]enum.Tag, 0, len(input.Tags))
 		for _, tag := range input.Tags {
-			t, err := enum.ParseTag(tag)
-			if err != nil {
-				return nil, err
+			t, err2 := enum.ParseTag(tag)
+			if err2 != nil {
+				return nil, err2
 			}
 			tags = append(tags, t)
 		}

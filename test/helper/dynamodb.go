@@ -169,9 +169,9 @@ func createTestTableArticle(t testing.TB, ctx context.Context, dynamoDB *appDyna
 
 	// テスト終了時にテーブル削除
 	t.Cleanup(func() {
-		_, err := dynamoDB.Client().DeleteTable(ctx, &dynamodb.DeleteTableInput{
+		_, err2 := dynamoDB.Client().DeleteTable(ctx, &dynamodb.DeleteTableInput{
 			TableName: aws.String(tableName),
 		})
-		require.NoError(t, err)
+		require.NoError(t, err2)
 	})
 }
