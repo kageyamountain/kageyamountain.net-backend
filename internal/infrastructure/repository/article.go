@@ -66,7 +66,7 @@ func (a articleRepository) FindAllForList(ctx context.Context) ([]*entity.Articl
 	}
 
 	// DomainModelに変換
-	var domainModels []*entity.Article
+	domainModels := make([]*entity.Article, 0, len(dbModels))
 	for _, dbModel := range dbModels {
 		domainModel, err := entity.NewArticle(&entity.NewArticleInput{
 			ID:          dbModel.PK,
