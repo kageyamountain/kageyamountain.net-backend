@@ -1,4 +1,4 @@
-package usecase
+package article_get
 
 import (
 	"context"
@@ -9,21 +9,21 @@ import (
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/repository"
 )
 
-type ArticleGetUseCase interface {
-	Execute(ctx context.Context, articleID string) (*ArticleGetUseCaseOutput, error)
+type UseCase interface {
+	Execute(ctx context.Context, articleID string) (*UseCaseOutput, error)
 }
 
-type articleGetUseCase struct {
+type useCase struct {
 	articleRepository repository.ArticleRepository
 }
 
-func NewArticleUseCase(articleRepository repository.ArticleRepository) ArticleGetUseCase {
-	return &articleGetUseCase{
+func NewUseCase(articleRepository repository.ArticleRepository) UseCase {
+	return &useCase{
 		articleRepository: articleRepository,
 	}
 }
 
-type ArticleGetUseCaseOutput struct {
+type UseCaseOutput struct {
 	ID          string
 	UpdatedAt   time.Time
 	PublishedAt time.Time
@@ -32,14 +32,14 @@ type ArticleGetUseCaseOutput struct {
 	Tags        []string
 }
 
-func (a *articleGetUseCase) Execute(ctx context.Context, inputArticleID string) (*ArticleGetUseCaseOutput, error) {
+func (u *useCase) Execute(ctx context.Context, inputArticleID string) (*UseCaseOutput, error) {
 	// Value Objectへの変換
 	articleID, err := value.NewArticleID(inputArticleID)
 	if err != nil {
 		return nil, err
 	}
 
-	articleEntity, err := a.articleRepository.FindByID(ctx, articleID)
+	articleEntity, err := u.articleRepository.FindByID(ctx, articleID)
 	if err != nil {
 		return nil, err
 	}
@@ -54,11 +54,11 @@ func (a *articleGetUseCase) Execute(ctx context.Context, inputArticleID string) 
 		return nil, nil
 	}
 
-	return a.convertToOutput(articleEntity), nil
+	return u.convertToOutput(articleEntity), nil
 }
 
-func (a *articleGetUseCase) convertToOutput(article *entity.Article) *ArticleGetUseCaseOutput {
-	output := &ArticleGetUseCaseOutput{
+func (u *useCase) convertToOutput(article *entity.Article) *UseCaseOutput {
+	output := &UseCaseOutput{
 		ID:          article.ID.Value(),
 		UpdatedAt:   article.UpdatedAt,
 		PublishedAt: article.PublishedAt,

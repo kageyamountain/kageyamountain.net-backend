@@ -1,4 +1,4 @@
-package usecase
+package articles_get
 
 import (
 	"context"
@@ -8,44 +8,44 @@ import (
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/repository"
 )
 
-type ArticlesGetUseCase interface {
-	Execute(ctx context.Context) (*ArticlesGetUseCaseOutput, error)
+type UseCase interface {
+	Execute(ctx context.Context) (*UseCaseOutput, error)
 }
 
-type articlesGetUseCase struct {
+type useCase struct {
 	articleRepository repository.ArticleRepository
 }
 
-func NewArticlesUseCase(articleRepository repository.ArticleRepository) ArticlesGetUseCase {
-	return &articlesGetUseCase{
+func NewUseCase(articleRepository repository.ArticleRepository) UseCase {
+	return &useCase{
 		articleRepository: articleRepository,
 	}
 }
 
-type ArticlesGetUseCaseOutput struct {
-	Articles []*ArticlesGetUseCaseOutputRow
+type UseCaseOutput struct {
+	Articles []*UseCaseOutputRow
 }
 
-type ArticlesGetUseCaseOutputRow struct {
+type UseCaseOutputRow struct {
 	ID          string
 	PublishedAt time.Time
 	Title       string
 	Tags        []string
 }
 
-func (a *articlesGetUseCase) Execute(ctx context.Context) (*ArticlesGetUseCaseOutput, error) {
-	articlesEntity, err := a.articleRepository.FindAllForList(ctx)
+func (u *useCase) Execute(ctx context.Context) (*UseCaseOutput, error) {
+	articlesEntity, err := u.articleRepository.FindAllForList(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return a.convertToOutput(articlesEntity), nil
+	return u.convertToOutput(articlesEntity), nil
 }
 
-func (a *articlesGetUseCase) convertToOutput(articles []*entity.Article) *ArticlesGetUseCaseOutput {
-	var output ArticlesGetUseCaseOutput
+func (u *useCase) convertToOutput(articles []*entity.Article) *UseCaseOutput {
+	var output UseCaseOutput
 	for _, article := range articles {
-		outputRow := &ArticlesGetUseCaseOutputRow{
+		outputRow := &UseCaseOutputRow{
 			ID:          article.ID.Value(),
 			PublishedAt: article.PublishedAt,
 			Title:       article.Title,

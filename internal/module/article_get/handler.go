@@ -1,19 +1,18 @@
-package handler
+package article_get
 
 import (
 	"log/slog"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/application/usecase"
 	openapi "github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi/v1"
 )
 
 type ArticleGetHandler struct {
-	useCase usecase.ArticleGetUseCase
+	useCase UseCase
 }
 
-func NewArticleGetHandler(useCase usecase.ArticleGetUseCase) *ArticleGetHandler {
+func NewHandler(useCase UseCase) *ArticleGetHandler {
 	return &ArticleGetHandler{
 		useCase: useCase,
 	}
