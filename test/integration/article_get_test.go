@@ -100,8 +100,8 @@ func TestArticleGet(t *testing.T) {
 				var articles []entity.Article
 				for _, testArticleInput := range tt.testArticleInputs {
 					// DynamoDB登録用のEntity作成
-					article, err := entity.NewArticle(&testArticleInput)
-					require.NoError(t, err)
+					article, err2 := entity.NewArticle(&testArticleInput)
+					require.NoError(t, err2)
 					articles = append(articles, *article)
 				}
 				dynamoDB, err := dynamodb.NewClient(ctx, appConfig)
@@ -124,8 +124,8 @@ func TestArticleGet(t *testing.T) {
 				gotResponse, err := client.Do(req)
 				require.NoError(t, err)
 				t.Cleanup(func() {
-					err := gotResponse.Body.Close()
-					require.NoError(t, err)
+					err2 := gotResponse.Body.Close()
+					require.NoError(t, err2)
 				})
 
 				// Assert
@@ -224,8 +224,8 @@ func TestArticleGet(t *testing.T) {
 				var articles []entity.Article
 				for _, testArticleInput := range tt.testArticleInputs {
 					// DynamoDB登録用のEntity作成
-					article, err := entity.NewArticle(&testArticleInput)
-					require.NoError(t, err)
+					article, err2 := entity.NewArticle(&testArticleInput)
+					require.NoError(t, err2)
 					articles = append(articles, *article)
 				}
 				dynamoDB, err := dynamodb.NewClient(ctx, appConfig)
@@ -248,8 +248,8 @@ func TestArticleGet(t *testing.T) {
 				gotResponse, err := client.Do(req)
 				require.NoError(t, err)
 				t.Cleanup(func() {
-					err := gotResponse.Body.Close()
-					require.NoError(t, err)
+					err2 := gotResponse.Body.Close()
+					require.NoError(t, err2)
 				})
 
 				// Assert

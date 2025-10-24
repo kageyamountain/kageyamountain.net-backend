@@ -90,7 +90,6 @@ func main() {
 		ConditionExpression:      expr.Condition(),
 		ExpressionAttributeNames: expr.Names(),
 	})
-
 	if err != nil {
 		var condCheckErr *types.ConditionalCheckFailedException
 		if errors.As(err, &condCheckErr) {

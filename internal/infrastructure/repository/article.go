@@ -66,17 +66,17 @@ func (a articleRepository) FindAllForList(ctx context.Context) ([]*entity.Articl
 	}
 
 	// DomainModelに変換
-	var domainModels []*entity.Article
+	domainModels := make([]*entity.Article, 0, len(dbModels))
 	for _, dbModel := range dbModels {
-		domainModel, err := entity.NewArticle(&entity.NewArticleInput{
+		domainModel, err2 := entity.NewArticle(&entity.NewArticleInput{
 			ID:          dbModel.PK,
 			Status:      dbModel.Status,
 			PublishedAt: time.Unix(dbModel.PublishedAt, 0).UTC(),
 			Title:       dbModel.Title,
 			Tags:        dbModel.Tags,
 		})
-		if err != nil {
-			return nil, err
+		if err2 != nil {
+			return nil, err2
 		}
 
 		domainModels = append(domainModels, domainModel)

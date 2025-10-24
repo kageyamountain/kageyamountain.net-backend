@@ -98,8 +98,8 @@ func TestArticlesGet(t *testing.T) {
 				var wantArticles []openapi.ArticleSummary
 				for _, testArticleInput := range tt.testArticleInputs {
 					// DynamoDB登録用のEntity作成
-					article, err := entity.NewArticle(&testArticleInput)
-					require.NoError(t, err)
+					article, err2 := entity.NewArticle(&testArticleInput)
+					require.NoError(t, err2)
 					articles = append(articles, *article)
 
 					// テスト期待値の作成
@@ -136,8 +136,8 @@ func TestArticlesGet(t *testing.T) {
 				gotResponse, err := client.Do(req)
 				require.NoError(t, err)
 				t.Cleanup(func() {
-					err := gotResponse.Body.Close()
-					require.NoError(t, err)
+					err2 := gotResponse.Body.Close()
+					require.NoError(t, err2)
 				})
 
 				// Assert

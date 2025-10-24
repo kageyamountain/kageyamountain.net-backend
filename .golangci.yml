@@ -24,21 +24,38 @@ issues:
 linters:
   default: none  # 全て無効化してから個別に有効化する
   enable:
+    - bodyclose     # httpレスポンスのclose
+    - dupl          # 重複コード
     - errcheck      # エラーハンドリング
+    - errorlint     # error型関連
+    - exhaustive    # 網羅性
+    - goconst       # 定数化
     - gocritic      # 詳細なコード分析
     - gocyclo       # サイクロマティック複雑度分析（循環的複雑度）
     - gosec         # セキュリティチェック
     - govet         # go vet相当
     - ineffassign   # 無効な代入
     - misspell      # スペルミス
+    - nestif        # ネストの深いif文
+    - noctx         # httpリクエストのcontext送信
+    - paralleltest  # 並列テスト
+    - prealloc      # アロケーション
+    - protogetter   # gRPCのproto messageの直接アクセス
     - revive        # golintの後継
     - staticcheck   # 静的解析
+    - unconvert     # 不要な型変換
     - unused        # 未使用コード
+    - whitespace    # if,for前後の不要な改行
+  disable:
+    - funlen        # 関数の行数
 
   settings:
     errcheck:
       check-type-assertions: true
       check-blank: true
+
+    exhaustive:
+      default-signifies-exhaustive: true
 
     gocritic:
       enabled-tags:
@@ -51,6 +68,14 @@ linters:
     gocyclo:
       min-complexity: 15
 
+    govet:
+      enable-all: true
+      disable:
+        - fieldalignment # 可読性が低下するので無効化
+      settings:
+        shadow:
+          strict: true
+
     revive:
       rules:
         - name: package-comments
@@ -61,25 +86,33 @@ linters:
   exclusions:
     generated: lax  # 生成コードを緩やかに検出して除外
 
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+
     rules:
       - path: _test\.go # テストファイルでの無効化
         linters:
+          - bodyclose
+          - dupl
+          - errcheck
+          - funlen
+          - goconst
           - gosec
-
-      - path: ".*_gen\\.go$" # 生成コードでの無効化
-        linters:
-          - gosec
-
-      - path: "mock/" # mock/ ディレクトリでの無効化
-        linters:
-          - gosec
+          - noctx
+          - wrapcheck
 
 formatters:
   enable:
-    - gofmt         # フォーマット
+    - gofumpt       # gofmtのスーパーセット
     - goimports     # import整理
 
   settings:
     goimports:
       local-prefixes:
         - github.com/kageyamountain/kageyamountain.net/backend
+
+  exclusions:
+    generated: disable
