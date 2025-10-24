@@ -1,8 +1,8 @@
 package router
 
 import (
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/module/article_get"
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/module/articles_get"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/feature/article_get"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/feature/articles_get"
 )
 
 type ServerInterfaceHandler struct {
