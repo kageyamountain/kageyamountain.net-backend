@@ -8,6 +8,7 @@ import (
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/gateway/dynamodb"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/repository"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/module/articles_get"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/handler"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/middleware"
 	openapi "github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi/v1"
@@ -42,11 +43,11 @@ func initializeHandler(ctx context.Context, appConfig *config.AppConfig) (*opena
 	articleRepository := repository.NewArticleRepository(dynamoDB, appConfig)
 
 	// UseCase
-	articlesUsecase := usecase.NewArticlesUseCase(articleRepository)
+	articlesUsecase := articles_get.NewUseCase(articleRepository)
 	articleUsecase := usecase.NewArticleUseCase(articleRepository)
 
 	// Handler
-	articlesGetHandler := handler.NewArticlesGetHandler(articlesUsecase)
+	articlesGetHandler := articles_get.NewHandler(articlesUsecase)
 	articleGetHandler := handler.NewArticleGetHandler(articleUsecase)
 
 	// OpenAPI生成コードのServerInterfaceを実装するHandlerを作成

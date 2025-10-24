@@ -1,18 +1,21 @@
 package router
 
-import "github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/handler"
+import (
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/module/articles_get"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/handler"
+)
 
 type ServerInterfaceHandler struct {
-	*handler.ArticlesGetHandler
+	*articles_get.Handler
 	*handler.ArticleGetHandler
 }
 
 func NewServerInterfaceHandler(
-	articlesGetHandler *handler.ArticlesGetHandler,
+	articlesGetHandler *articles_get.Handler,
 	articleGetHandler *handler.ArticleGetHandler,
 ) *ServerInterfaceHandler {
 	return &ServerInterfaceHandler{
-		ArticlesGetHandler: articlesGetHandler,
-		ArticleGetHandler:  articleGetHandler,
+		Handler:           articlesGetHandler,
+		ArticleGetHandler: articleGetHandler,
 	}
 }

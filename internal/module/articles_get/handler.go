@@ -1,26 +1,25 @@
-package handler
+package articles_get
 
 import (
 	"log/slog"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/kageyamountain/kageyamountain.net-backend/internal/application/usecase"
 	openapi "github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi/v1"
 )
 
-type ArticlesGetHandler struct {
-	useCase usecase.ArticlesGetUseCase
+type Handler struct {
+	useCase UseCase
 }
 
-func NewArticlesGetHandler(useCase usecase.ArticlesGetUseCase) *ArticlesGetHandler {
-	return &ArticlesGetHandler{
+func NewHandler(useCase UseCase) *Handler {
+	return &Handler{
 		useCase: useCase,
 	}
 }
 
 // GET /articles エンドポイント
-func (a *ArticlesGetHandler) ArticlesGet(c *gin.Context, params openapi.ArticlesGetParams) {
+func (a *Handler) ArticlesGet(c *gin.Context, params openapi.ArticlesGetParams) {
 	ctx := c.Request.Context()
 
 	// TODO リクエストパラメータを利用した公開年とタグのフィルタリング機能実装
