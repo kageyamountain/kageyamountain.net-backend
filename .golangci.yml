@@ -27,6 +27,7 @@ linters:
     - protogetter  # gRPCのproto messageの直接アクセス
     - revive       # golintの後継
     - staticcheck  # 静的解析
+    - thelper      # t.Helper()
     - unconvert    # 不要な型変換
     - unused       # 未使用コード
     - whitespace   # if,for前後の不要な改行
