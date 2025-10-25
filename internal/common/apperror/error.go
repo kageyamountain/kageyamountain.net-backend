@@ -12,14 +12,14 @@ var (
 )
 
 func NewErrorNoData(params ...string) error {
-	return formatError(ErrorNoData, params...)
+	return formatError(ErrorNoData, params)
 }
 
 func NewErrorUnpublishedArticle(params ...string) error {
-	return formatError(ErrorUnpublishedArticle, params...)
+	return formatError(ErrorUnpublishedArticle, params)
 }
 
-func formatError(err error, params ...string) error {
+func formatError(err error, params []string) error {
 	if len(params) == 0 {
 		return err
 	}
