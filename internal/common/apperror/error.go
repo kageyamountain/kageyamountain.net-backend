@@ -11,7 +11,7 @@ var (
 	ErrorUnpublishedArticle = errors.New("error unpublished article")
 )
 
-func NewErrorNodata(params ...string) error {
+func NewErrorNoData(params ...string) error {
 	if len(params) == 0 {
 		return fmt.Errorf("%w", ErrorNoData)
 	}

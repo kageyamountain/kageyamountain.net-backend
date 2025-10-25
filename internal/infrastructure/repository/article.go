@@ -103,7 +103,7 @@ func (a articleRepository) FindByID(ctx context.Context, articleID *value.Articl
 
 	// 指定ID記事の存在チェック
 	if result.Item == nil {
-		return nil, apperror.NewErrorNodata(fmt.Sprintf("article_id: %s", articleID.Value()))
+		return nil, apperror.NewErrorNoData(fmt.Sprintf("article_id: %s", articleID.Value()))
 	}
 
 	// DBModelにマッピング
