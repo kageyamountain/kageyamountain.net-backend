@@ -2,8 +2,10 @@ package article_get
 
 import (
 	"context"
+	"fmt"
 	"time"
 
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/apperror"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/entity"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/repository"
@@ -33,7 +35,6 @@ type UseCaseOutput struct {
 }
 
 func (u *useCase) Execute(ctx context.Context, inputArticleID string) (*UseCaseOutput, error) {
-	// Value Objectへの変換
 	articleID, err := value.NewArticleID(inputArticleID)
 	if err != nil {
 		return nil, err
@@ -44,14 +45,9 @@ func (u *useCase) Execute(ctx context.Context, inputArticleID string) (*UseCaseO
 		return nil, err
 	}
 
-	// 指定IDの記事が存在しない場合はnilを返す
-	if articleEntity == nil {
-		return nil, nil
-	}
-
-	// 公開中の記事でない場合はnilを返す
+	// 非公開記事の場合はエラーを返す
 	if !articleEntity.IsPublish() {
-		return nil, nil
+		return nil, apperror.NewErrorUnpublishedArticle(fmt.Sprintf("article_id: %s", articleID.Value()))
 	}
 
 	return u.convertToOutput(articleEntity), nil

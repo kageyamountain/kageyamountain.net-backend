@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -9,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/apperror"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/config"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/entity"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/domain/model/value"
@@ -101,7 +103,7 @@ func (a articleRepository) FindByID(ctx context.Context, articleID *value.Articl
 
 	// 指定ID記事の存在チェック
 	if result.Item == nil {
-		return nil, nil
+		return nil, apperror.NewErrorNoData(fmt.Sprintf("article_id: %s", articleID.Value()))
 	}
 
 	// DBModelにマッピング
