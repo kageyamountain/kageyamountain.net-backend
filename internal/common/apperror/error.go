@@ -12,17 +12,18 @@ var (
 )
 
 func NewErrorNoData(params ...string) error {
-	if len(params) == 0 {
-		return fmt.Errorf("%w", ErrorNoData)
-	}
-	return fmt.Errorf("%w: %s", ErrorNoData, strings.Join(params, ", "))
+	return formatError(ErrorNoData, params)
 }
 
 func NewErrorUnpublishedArticle(params ...string) error {
+	return formatError(ErrorUnpublishedArticle, params)
+}
+
+func formatError(err error, params []string) error {
 	if len(params) == 0 {
-		return fmt.Errorf("%w", ErrorUnpublishedArticle)
+		return err
 	}
-	return fmt.Errorf("%w: %s", ErrorUnpublishedArticle, strings.Join(params, ", "))
+	return fmt.Errorf("%w: %s", err, strings.Join(params, ", "))
 }
 
 func IsOneOf(err error, targets ...error) bool {
