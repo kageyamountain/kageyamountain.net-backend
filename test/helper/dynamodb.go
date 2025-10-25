@@ -19,19 +19,19 @@ import (
 )
 
 func InsertTestArticles(
-	t testing.TB,
+	tb testing.TB,
 	ctx context.Context,
 	appConfig *config.AppConfig,
 	dynamoDB *appDynamoDB.Client,
 	articles []entity.Article,
 ) {
-	t.Helper()
+	tb.Helper()
 
 	// 並列テスト実行のためにユニークなテーブル名に変更
 	appConfig.AWS.DynamoDB.TableNameArticle = fmt.Sprintf("%s_test_%s", appConfig.AWS.DynamoDB.TableNameArticle, uuid.New().String())
 
 	// テスト用のテーブル作成（テスト終了時のテーブル削除処理含む）
-	createTestTableArticle(t, ctx, dynamoDB, appConfig.AWS.DynamoDB.TableNameArticle)
+	createTestTableArticle(tb, ctx, dynamoDB, appConfig.AWS.DynamoDB.TableNameArticle)
 
 	// テストデータ登録
 	for i := range articles {
@@ -51,18 +51,18 @@ func InsertTestArticles(
 		}
 
 		item, err := attributevalue.MarshalMap(dbModel)
-		require.NoError(t, err)
+		require.NoError(tb, err)
 
 		_, err = dynamoDB.Client().PutItem(ctx, &dynamodb.PutItemInput{
 			TableName: aws.String(appConfig.AWS.DynamoDB.TableNameArticle),
 			Item:      item,
 		})
-		require.NoError(t, err)
+		require.NoError(tb, err)
 	}
 }
 
-func createTestTableArticle(t testing.TB, ctx context.Context, dynamoDB *appDynamoDB.Client, tableName string) {
-	t.Helper()
+func createTestTableArticle(tb testing.TB, ctx context.Context, dynamoDB *appDynamoDB.Client, tableName string) {
+	tb.Helper()
 
 	input := &dynamodb.CreateTableInput{
 		BillingMode: types.BillingModePayPerRequest,
@@ -158,20 +158,20 @@ func createTestTableArticle(t testing.TB, ctx context.Context, dynamoDB *appDyna
 
 	// テーブル作成
 	_, err := dynamoDB.Client().CreateTable(ctx, input)
-	require.NoError(t, err)
+	require.NoError(tb, err)
 
 	// テーブル作成完了まで待機
 	waiter := dynamodb.NewTableExistsWaiter(dynamoDB.Client())
 	err = waiter.Wait(ctx, &dynamodb.DescribeTableInput{
 		TableName: aws.String(tableName),
 	}, 30*time.Second)
-	require.NoError(t, err)
+	require.NoError(tb, err)
 
 	// テスト終了時にテーブル削除
-	t.Cleanup(func() {
+	tb.Cleanup(func() {
 		_, err2 := dynamoDB.Client().DeleteTable(ctx, &dynamodb.DeleteTableInput{
 			TableName: aws.String(tableName),
 		})
-		require.NoError(t, err2)
+		require.NoError(tb, err2)
 	})
 }
