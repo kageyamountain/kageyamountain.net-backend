@@ -1,6 +1,6 @@
 module github.com/kageyamountain/kageyamountain.net-backend
 
-go 1.24.6
+go 1.25.3
 
 tool (
 	github.com/matryer/moq
