@@ -71,6 +71,7 @@ tasks:
 
   table-reset:
     desc: 開発用DynamoDBのテーブルをリセット
+    silent: true
     deps: [ table-delete ]
     cmds:
       - sleep 2
@@ -78,6 +79,7 @@ tasks:
 
   table-describe:
     desc: 開発用DynamoDBのテーブル定義を表示
+    silent: true
     cmds:
       - aws dynamodb describe-table --table-name article --endpoint-url http://localhost:8000 --no-cli-pager
 
@@ -100,3 +102,11 @@ tasks:
       - go tool oapi-codegen -generate types -package v1 -o internal/presentation/openapi/v1/types.gen.go internal/presentation/openapi/v1/api.yaml
       - go tool oapi-codegen -generate gin -package v1 -o internal/presentation/openapi/v1/handler.gen.go internal/presentation/openapi/v1/api.yaml
       - go tool oapi-codegen -generate client -package v1 -o internal/presentation/openapi/v1/client.gen.go internal/presentation/openapi/v1/api.yaml
+
+  # Mock
+  mock-gen:
+    desc: moqを用いたmock生成
+    silent: true
+    cmds:
+      - find . -type f -name "*_mock.go" -exec rm -f {} +
+      - go generate -run="go tool moq" ./...
