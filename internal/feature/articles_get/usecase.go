@@ -1,3 +1,4 @@
+//go:generate sh -c "go tool moq -out ./$(basename ${GOFILE} .go)_mock.go . UseCase"
 package articles_get
 
 import (
