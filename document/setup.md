@@ -4,7 +4,7 @@ Windows環境を例に書いているが、Macもhomebrewで `mise` をインス
 ### 前提
 
 - Git
-- WSL や Git Bash などのUnix系シェル実行環境
+- WSL2 や Git Bash などのUnix系シェル実行環境
 - Docker Desktop
 - Pathは適宜通すこと
 
@@ -20,10 +20,49 @@ Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
 環境管理ツールの `mise` をインストールする。
 ```shell
 scoop install mise
-mise install
 ```
 
-go mod tidyで依存関係を整理する。
+ターミナルの環境変数に追加（git bashの場合は `~/.bashrc`）
+```
+# mise
+export PATH="$HOME/scoop/apps/mise/current/bin:$PATH"
+export PATH="$HOME/AppData/Local/mise/shims:$PATH"
+```
+
+環境変数設定を反映
+```shell
+source ~/.bashrc
+```
+
+miseの実験的機能の有効化
+```shell
+mise settings set experimental true
+
+# 確認
+mise settings get experimental
+```
+
+shimsを有効化
+```shell
+mise reshim
+
+# shimsが作成されているか確認
+ls ~/AppData/Local/mise/shims
+
+# miseが動作するか確認
+mise --version
+```
+
+インストール
+```shell
+cd /path/to/your/project
+mise install
+
+# 動作確認
+go version
+```
+
+go mod tidyで依存関係の整理（コンテナ環境なので必須ではないが、IDE補完などの開発体験的に推奨）
 ```shell
 go mod tidy
 ```
