@@ -11,9 +11,7 @@ import (
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/logger"
 )
 
-const (
-	HttpHeaderXRequestID = "X-Request-ID"
-)
+const HttpHeaderXRequestID = "X-Request-ID"
 
 func Log() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -24,21 +22,21 @@ func Log() gin.HandlerFunc {
 		// レスポンスヘッダーにRequestIDをセット
 		c.Header(HttpHeaderXRequestID, requestID)
 
-		// ログMapの設定
-		logMap := &sync.Map{}
-		logMap.Store("log_type", logger.LogTypeApp)
-		logMap.Store("request_id", requestID)
-		logMap.Store("method", c.Request.Method)
-		logMap.Store("path", c.Request.URL.Path)
+		// LogContextの設定
+		logContext := &sync.Map{}
+		logContext.Store("log_type", logger.LogTypeApp)
+		logContext.Store("request_id", requestID)
+		logContext.Store("method", c.Request.Method)
+		logContext.Store("path", c.Request.URL.Path)
 
-		// contextにログMapをセット
-		ctx := context.WithValue(c.Request.Context(), logger.ContextKeyLogMap, logMap)
+		// contextにlogContextをセット
+		ctx := context.WithValue(c.Request.Context(), logger.LogContextKey, logContext)
 		c.Request = c.Request.WithContext(ctx)
 
 		c.Next()
 
 		// アクセスログを出力
-		logMap.Store("log_type", logger.LogTypeAccess)
+		logContext.Store("log_type", logger.LogTypeAccess)
 		slog.InfoContext(ctx, "access log",
 			slog.String("host", c.Request.Host),
 			slog.String("uri", c.Request.URL.RequestURI()),
