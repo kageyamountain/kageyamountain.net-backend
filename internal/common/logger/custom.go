@@ -28,7 +28,7 @@ func NewAppLogHandler(handler slog.Handler) *CustomLogHandler {
 }
 
 // Handle contextにセットされたLogContextからログ出力フィールドを追加する
-func (h *CustomLogHandler) Handle(ctx context.Context, r slog.Record) error { //nolint:gocritic slogのinterface仕様なので第2引数はポインタ型にできない
+func (h *CustomLogHandler) Handle(ctx context.Context, r slog.Record) error { //nolint:gocritic // slogのinterface仕様なので第2引数はポインタ型にできない
 	// contextからLogContextを取得
 	logMap, ok := ctx.Value(LogContextKey).(*sync.Map)
 	if !ok {
