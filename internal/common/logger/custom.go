@@ -31,16 +31,18 @@ func NewAppLogHandler(handler slog.Handler) *AppLogHandler {
 func (h *AppLogHandler) Handle(ctx context.Context, r slog.Record) error { //nolint:gocritic //slogのinterface仕様なので第2引数はポインタ型にできない
 	// contextからログMapを取得
 	logMap, ok := ctx.Value(ContextKeyLogMap).(*sync.Map)
-	if ok {
-		// ログMapの全エントリをログに追加
-		logMap.Range(func(key, value interface{}) bool {
-			keyStr, ok2 := key.(string)
-			if ok2 {
-				r.AddAttrs(slog.Attr{Key: keyStr, Value: slog.AnyValue(value)})
-			}
-			return true // 継続
-		})
+	if !ok {
+		return h.Handler.Handle(ctx, r)
 	}
+
+	// ログMapの全エントリをログに追加
+	logMap.Range(func(key, value interface{}) bool {
+		keyStr, ok2 := key.(string)
+		if ok2 {
+			r.AddAttrs(slog.Attr{Key: keyStr, Value: slog.AnyValue(value)})
+		}
+		return true
+	})
 
 	// info: OpenTelemetryと連携する場合は有効化
 	//// OpenTelemetry trace情報を追加
