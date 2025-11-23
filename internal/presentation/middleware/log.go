@@ -19,13 +19,8 @@ func Log() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now()
 
-		// RequestID取得
-		// クライアントから送信されていればそのまま利用、無ければ生成
-		requestID := c.GetHeader(HttpHeaderXRequestID)
-		if requestID == "" {
-			requestID = uuid.New().String()
-		}
-
+		// RequestID生成
+		requestID := uuid.New().String()
 		// レスポンスヘッダーにRequestIDをセット
 		c.Header(HttpHeaderXRequestID, requestID)
 
