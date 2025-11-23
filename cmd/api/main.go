@@ -16,10 +16,10 @@ func main() {
 	ctx := context.Background()
 
 	// logger設定（カスタムslogハンドラを設定）
-	handler := logger.NewAppLogHandler(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+	customLogHandler := logger.NewCustomLogHandler(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
 		Level: slog.LevelInfo,
 	}))
-	slog.SetDefault(slog.New(handler))
+	slog.SetDefault(slog.New(customLogHandler))
 
 	// Ginのデフォルトログを無効化
 	gin.SetMode(gin.ReleaseMode)

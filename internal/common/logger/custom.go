@@ -21,7 +21,7 @@ type CustomLogHandler struct {
 	slog.Handler
 }
 
-func NewAppLogHandler(handler slog.Handler) *CustomLogHandler {
+func NewCustomLogHandler(handler slog.Handler) *CustomLogHandler {
 	return &CustomLogHandler{
 		Handler: handler,
 	}
@@ -30,13 +30,13 @@ func NewAppLogHandler(handler slog.Handler) *CustomLogHandler {
 // Handle contextにセットされたLogContextからログ出力フィールドを追加する
 func (h *CustomLogHandler) Handle(ctx context.Context, r slog.Record) error { //nolint:gocritic // slogのinterface仕様なので第2引数はポインタ型にできない
 	// contextからLogContextを取得
-	logMap, ok := ctx.Value(LogContextKey).(*sync.Map)
+	logContext, ok := ctx.Value(LogContextKey).(*sync.Map)
 	if !ok {
 		return h.Handler.Handle(ctx, r)
 	}
 
 	// LogContextの全エントリをログ出力属性に追加
-	logMap.Range(func(key, value interface{}) bool {
+	logContext.Range(func(key, value interface{}) bool {
 		keyStr, ok2 := key.(string)
 		if ok2 {
 			r.AddAttrs(slog.Attr{Key: keyStr, Value: slog.AnyValue(value)})
