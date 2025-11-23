@@ -30,7 +30,7 @@ func Log() gin.HandlerFunc {
 		logContext.Store("path", c.Request.URL.Path)
 
 		// contextにlogContextをセット
-		ctx := context.WithValue(c.Request.Context(), logger.ContextKey, logContext)
+		ctx := context.WithValue(c.Request.Context(), logger.LogContextKey, logContext)
 		c.Request = c.Request.WithContext(ctx)
 
 		c.Next()
