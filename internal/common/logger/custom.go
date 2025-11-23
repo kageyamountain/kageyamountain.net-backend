@@ -8,7 +8,7 @@ import (
 
 type contextKey string
 
-const ContextKeyLogMap contextKey = "LogMap"
+const ContextKey contextKey = "LogContext"
 
 type LogType string
 
@@ -17,25 +17,25 @@ const (
 	LogTypeAccess LogType = "access_log"
 )
 
-// カスタムslog Handler: contextにセットされたログMap(sync.Map)から自動的にフィールドを追加する機能を持つ
-type AppLogHandler struct {
+type CustomLogHandler struct {
 	slog.Handler
 }
 
-func NewAppLogHandler(handler slog.Handler) *AppLogHandler {
-	return &AppLogHandler{
+func NewAppLogHandler(handler slog.Handler) *CustomLogHandler {
+	return &CustomLogHandler{
 		Handler: handler,
 	}
 }
 
-func (h *AppLogHandler) Handle(ctx context.Context, r slog.Record) error { //nolint:gocritic //slogのinterface仕様なので第2引数はポインタ型にできない
-	// contextからログMapを取得
-	logMap, ok := ctx.Value(ContextKeyLogMap).(*sync.Map)
+// Handle contextにセットされたLogContextからログ出力フィールドを追加する
+func (h *CustomLogHandler) Handle(ctx context.Context, r slog.Record) error { //nolint:gocritic slogのinterface仕様なので第2引数はポインタ型にできない
+	// contextからLogContextを取得
+	logMap, ok := ctx.Value(ContextKey).(*sync.Map)
 	if !ok {
 		return h.Handler.Handle(ctx, r)
 	}
 
-	// ログMapの全エントリをログに追加
+	// LogContextの全エントリをログ出力属性に追加
 	logMap.Range(func(key, value interface{}) bool {
 		keyStr, ok2 := key.(string)
 		if ok2 {
