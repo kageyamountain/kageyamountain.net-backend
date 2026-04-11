@@ -12,7 +12,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.32.7
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.14
 	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.20.37
-	github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression v1.8.31
+	github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression v1.8.37
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.57.1
 	github.com/gin-contrib/cors v1.7.7
 	github.com/gin-gonic/gin v1.12.0
