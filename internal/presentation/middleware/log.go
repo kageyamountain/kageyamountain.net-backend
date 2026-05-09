@@ -1,9 +1,7 @@
 package middleware
 
 import (
-	"context"
 	"log/slog"
-	"sync"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -23,20 +21,20 @@ func Log() gin.HandlerFunc {
 		c.Header(HttpHeaderXRequestID, requestID)
 
 		// LogContextの設定
-		logContext := &sync.Map{}
-		logContext.Store("log_type", logger.LogTypeApp)
-		logContext.Store("request_id", requestID)
-		logContext.Store("method", c.Request.Method)
-		logContext.Store("path", c.Request.URL.Path)
+		logContextMap := logger.NewLogContextMap()
+		logContextMap.Store("log_type", logger.LogTypeApp)
+		logContextMap.Store("request_id", requestID)
+		logContextMap.Store("method", c.Request.Method)
+		logContextMap.Store("path", c.Request.URL.Path)
 
-		// contextにlogContextをセット
-		ctx := context.WithValue(c.Request.Context(), logger.LogContextKey, logContext)
+		// contextにlogContextMapをセット
+		ctx := logger.WithLogContextMap(c.Request.Context(), logContextMap)
 		c.Request = c.Request.WithContext(ctx)
 
 		c.Next()
 
 		// アクセスログを出力
-		logContext.Store("log_type", logger.LogTypeAccess)
+		logger.ChangeLogType(ctx, logger.LogTypeAccess)
 		slog.InfoContext(ctx, "access log",
 			slog.String("host", c.Request.Host),
 			slog.String("uri", c.Request.URL.RequestURI()),
