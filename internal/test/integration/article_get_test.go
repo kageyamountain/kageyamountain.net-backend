@@ -17,7 +17,7 @@ import (
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/infrastructure/gateway/dynamodb"
 	openapi "github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi/v1"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/router"
-	"github.com/kageyamountain/kageyamountain.net-backend/test/helper"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/test/helper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
