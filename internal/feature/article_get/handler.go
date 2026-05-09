@@ -19,7 +19,7 @@ func NewHandler(useCase UseCase) *ArticleGetHandler {
 	}
 }
 
-// GET /articles エンドポイント
+// GET /article エンドポイント
 func (a *ArticleGetHandler) ArticleGet(c *gin.Context, articleId string) {
 	ctx := c.Request.Context()
 
