@@ -26,11 +26,11 @@ func loadEnvFile(tb testing.TB) {
 
 	if env == "ci" {
 		// CI環境
-		err := godotenv.Load("../../.env.ci")
+		err := godotenv.Load("../../../.env.ci")
 		require.NoError(tb, err)
 	} else {
 		// ローカル開発環境
-		err := godotenv.Load("../../.env.dev")
+		err := godotenv.Load("../../../.env.dev")
 		require.NoError(tb, err)
 	}
 }
