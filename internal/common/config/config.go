@@ -28,7 +28,7 @@ type FrontendConfig struct {
 // APPプレフィックスを持つ環境変数を構造体に読み込む
 func Load() (*AppConfig, error) {
 	var appConfig AppConfig
-	err := envconfig.Process("APP", &appConfig)
+	err := envconfig.Process("", &appConfig)
 	if err != nil {
 		return nil, err
 	}
