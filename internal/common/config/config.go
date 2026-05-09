@@ -25,7 +25,7 @@ type FrontendConfig struct {
 	HostURL string `envconfig:"FRONTEND_HOST_URL" required:"true"`
 }
 
-// APPプレフィックスを持つ環境変数を構造体に読み込む
+// Load 環境変数を構造体にマッピングする
 func Load() (*AppConfig, error) {
 	var appConfig AppConfig
 	err := envconfig.Process("", &appConfig)
