@@ -33,7 +33,7 @@ func Log() gin.HandlerFunc {
 
 		c.Next()
 
-		// アクセスログを出力（log_typeはcall-siteで明示することでLogContextより優先される）
+		// アクセスログを出力
 		slog.InfoContext(ctx, "access log",
 			slog.Any("log_type", logger.LogTypeAccess),
 			slog.String("host", c.Request.Host),
