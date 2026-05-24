@@ -5,33 +5,49 @@ import (
 	"sync"
 )
 
-func NewLogContextMap() *sync.Map {
-	return &sync.Map{}
+type LogContext struct {
+	mutex      sync.RWMutex
+	attributes map[string]any
 }
 
-type logContextMapKey struct{}
-
-// WithLogContextMap LogContextMapをセットしたcontextを返す
-func WithLogContextMap(ctx context.Context, logContextMap *sync.Map) context.Context {
-	return context.WithValue(ctx, logContextMapKey{}, logContextMap)
+func NewLogContext() *LogContext {
+	return &LogContext{attributes: map[string]any{}}
 }
 
-// LogContextMapFromContext contextからLogContextMapを取り出す
-func LogContextMapFromContext(ctx context.Context) (*sync.Map, bool) {
-	logContextMap, ok := ctx.Value(logContextMapKey{}).(*sync.Map)
-	return logContextMap, ok
+// Set 属性を追加・更新する
+func (l *LogContext) Set(key string, value any) {
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
+	l.attributes[key] = value
 }
 
-type LogType string
+// ForEach 全属性を列挙する。読み出し中は書き込みがブロックされ、列挙はatomic snapshotとなる
+func (l *LogContext) ForEach(fn func(key string, value any)) {
+	l.mutex.RLock()
+	defer l.mutex.RUnlock()
+	for key, value := range l.attributes {
+		fn(key, value)
+	}
+}
 
-const (
-	LogTypeApp    LogType = "app_log"
-	LogTypeAccess LogType = "access_log"
-)
+type logContextKey struct{}
 
-func ChangeLogType(ctx context.Context, logType LogType) {
-	logContextMap, ok := LogContextMapFromContext(ctx)
+// WithLogContext LogContextをセットしたcontextを返す
+func WithLogContext(ctx context.Context, logContext *LogContext) context.Context {
+	return context.WithValue(ctx, logContextKey{}, logContext)
+}
+
+// LogContextFromContext contextからLogContextを取り出す
+func LogContextFromContext(ctx context.Context) (*LogContext, bool) {
+	logContext, ok := ctx.Value(logContextKey{}).(*LogContext)
+	return logContext, ok
+}
+
+// SetLogContextAttribute contextに紐づくLogContextに属性を追加する。
+// LogContextが未設定の場合は何もしない（middleware外で呼ばれた場合の想定）
+func SetLogContextAttribute(ctx context.Context, key string, value any) {
+	logContext, ok := LogContextFromContext(ctx)
 	if ok {
-		logContextMap.Store("log_type", logType)
+		logContext.Set(key, value)
 	}
 }
