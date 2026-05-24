@@ -21,21 +21,21 @@ func Log() gin.HandlerFunc {
 		c.Header(HttpHeaderXRequestID, requestID)
 
 		// LogContextの設定
-		logContextMap := logger.NewLogContextMap()
-		logContextMap.Store("log_type", logger.LogTypeApp)
-		logContextMap.Store("request_id", requestID)
-		logContextMap.Store("method", c.Request.Method)
-		logContextMap.Store("path", c.Request.URL.Path)
+		logContext := logger.NewLogContext()
+		logContext.Set("log_type", logger.LogTypeApp)
+		logContext.Set("request_id", requestID)
+		logContext.Set("method", c.Request.Method)
+		logContext.Set("path", c.Request.URL.Path)
 
-		// contextにlogContextMapをセット
-		ctx := logger.WithLogContextMap(c.Request.Context(), logContextMap)
+		// contextにlogContextをセット
+		ctx := logger.WithLogContext(c.Request.Context(), logContext)
 		c.Request = c.Request.WithContext(ctx)
 
 		c.Next()
 
 		// アクセスログを出力
-		logger.ChangeLogType(ctx, logger.LogTypeAccess)
 		slog.InfoContext(ctx, "access log",
+			slog.Any("log_type", logger.LogTypeAccess),
 			slog.String("host", c.Request.Host),
 			slog.String("uri", c.Request.URL.RequestURI()),
 			slog.Int("status", c.Writer.Status()),
