@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/apperror"
+	"github.com/kageyamountain/kageyamountain.net-backend/internal/common/logger"
 	openapi "github.com/kageyamountain/kageyamountain.net-backend/internal/presentation/openapi/v1"
 )
 
@@ -26,7 +27,7 @@ func (a *ArticleGetHandler) ArticleGet(c *gin.Context, articleId string) {
 	useCaseOutput, err := a.useCase.Execute(ctx, articleId)
 	if err != nil {
 		if apperror.IsOneOf(err, apperror.ErrorNoData, apperror.ErrorUnpublishedArticle) {
-			slog.InfoContext(ctx, "failed to use case", slog.Any("err", err))
+			slog.InfoContext(ctx, "failed to use case", slog.Any(logger.AttrKeyError, err))
 			c.AbortWithStatusJSON(http.StatusNotFound, openapi.Error{
 				Code:    openapi.NotFound,
 				Message: "article not found",
@@ -34,7 +35,7 @@ func (a *ArticleGetHandler) ArticleGet(c *gin.Context, articleId string) {
 			return
 		}
 
-		slog.ErrorContext(ctx, "failed to use case", slog.Any("err", err))
+		slog.ErrorContext(ctx, "failed to use case", slog.Any(logger.AttrKeyError, err))
 		c.AbortWithStatusJSON(http.StatusInternalServerError, openapi.Error{
 			Code:    openapi.InternalServerError,
 			Message: "server error",

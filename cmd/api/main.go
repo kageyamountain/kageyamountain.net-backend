@@ -16,7 +16,7 @@ func main() {
 	ctx := context.Background()
 
 	// logger設定
-	customLogHandler := logger.NewCustomLogHandler(
+	logHandler := logger.NewHandler(
 		slog.NewJSONHandler(
 			os.Stdout,
 			&slog.HandlerOptions{
@@ -24,7 +24,7 @@ func main() {
 			},
 		),
 	)
-	slog.SetDefault(slog.New(customLogHandler))
+	slog.SetDefault(slog.New(logHandler))
 
 	// Ginのデフォルトログを無効化
 	gin.SetMode(gin.ReleaseMode)
@@ -32,28 +32,28 @@ func main() {
 	// 環境変数のロード（dev環境のみ）
 	err := loadEnvFileOnlyDev()
 	if err != nil {
-		slog.Error("failed to load .env file.", slog.Any("err", err))
+		slog.ErrorContext(ctx, "failed to load .env file.", slog.Any(logger.AttrKeyError, err))
 		return
 	}
 
 	// 環境変数をAppConfigへマッピング
 	appConfig, err := config.Load()
 	if err != nil {
-		slog.Error("failed to AppConfig Load.", slog.Any("err", err))
+		slog.ErrorContext(ctx, "failed to AppConfig Load.", slog.Any(logger.AttrKeyError, err))
 		return
 	}
 
 	// ルーティングの設定
 	r, err := router.Setup(ctx, appConfig)
 	if err != nil {
-		slog.Error("failed to setup router.", slog.Any("err", err))
+		slog.ErrorContext(ctx, "failed to setup router.", slog.Any(logger.AttrKeyError, err))
 		return
 	}
 
 	// Webサーバーの起動
 	err = r.Run("0.0.0.0:8080")
 	if err != nil {
-		slog.Error("failed to run server.", slog.Any("err", err))
+		slog.ErrorContext(ctx, "failed to run server.", slog.Any(logger.AttrKeyError, err))
 		return
 	}
 }
