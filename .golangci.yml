@@ -38,24 +38,19 @@ linters:
     - goconst       # 定数化
   settings:
     errcheck:
-      check-type-assertions: true
       check-blank: true
+      check-type-assertions: true
     exhaustive:
       default-signifies-exhaustive: true
     gocritic:
       enabled-tags:
+        - experimental
         - performance
         - style
-        - experimental
       disabled-checks:
         - commentedOutCode
     gocyclo:
       min-complexity: 15
-    sloglint:
-      attr-only: true        # 属性のslog.Attr形式を強制
-      context: all           # InfoContext等のContext付き関数を強制
-      static-msg: true       # メッセージの固定文字列を強制
-      key-naming-case: snake # キー名のsnake_caseを強制
     govet:
       enable-all: true
       disable:
@@ -65,10 +60,15 @@ linters:
           strict: true
     revive:
       rules:
-        - name: package-comments
-          disabled: true  # パッケージのコメント要求を無効化
         - name: exported
           disabled: true  # 関数名から始まるコメント要求を無効化
+        - name: package-comments
+          disabled: true  # パッケージのコメント要求を無効化
+    sloglint:
+      attr-only: true        # 属性のslog.Attr形式を強制
+      context: all           # InfoContext等のContext付き関数を強制
+      key-naming-case: snake # キー名のsnake_caseを強制
+      static-msg: true       # メッセージの固定文字列を強制
   exclusions:
     generated: lax
     presets:
