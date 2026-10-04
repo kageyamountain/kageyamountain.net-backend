@@ -27,7 +27,7 @@ func (a *ArticlesGetHandler) ArticlesGet(c *gin.Context, params openapi.Articles
 
 	useCaseOutput, err := a.useCase.Execute(ctx)
 	if err != nil {
-		slog.ErrorContext(ctx, "failed to ArticlesGet use case", slog.Any(logger.AttrKeyError, err))
+		slog.ErrorContext(ctx, "failed to ArticlesGet use case", slog.Any(logger.AttributeKeyError, err))
 		c.AbortWithStatusJSON(http.StatusInternalServerError, openapi.Error{
 			Code:    openapi.InternalServerError,
 			Message: "server error",

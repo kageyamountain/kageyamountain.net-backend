@@ -32,28 +32,28 @@ func main() {
 	// 環境変数のロード（dev環境のみ）
 	err := loadEnvFileOnlyDev()
 	if err != nil {
-		slog.ErrorContext(ctx, "failed to load .env file.", slog.Any(logger.AttrKeyError, err))
+		slog.ErrorContext(ctx, "failed to load .env file.", slog.Any(logger.AttributeKeyError, err))
 		return
 	}
 
 	// 環境変数をAppConfigへマッピング
 	appConfig, err := config.Load()
 	if err != nil {
-		slog.ErrorContext(ctx, "failed to AppConfig Load.", slog.Any(logger.AttrKeyError, err))
+		slog.ErrorContext(ctx, "failed to AppConfig Load.", slog.Any(logger.AttributeKeyError, err))
 		return
 	}
 
 	// ルーティングの設定
 	r, err := router.Setup(ctx, appConfig)
 	if err != nil {
-		slog.ErrorContext(ctx, "failed to setup router.", slog.Any(logger.AttrKeyError, err))
+		slog.ErrorContext(ctx, "failed to setup router.", slog.Any(logger.AttributeKeyError, err))
 		return
 	}
 
 	// Webサーバーの起動
 	err = r.Run("0.0.0.0:8080")
 	if err != nil {
-		slog.ErrorContext(ctx, "failed to run server.", slog.Any(logger.AttrKeyError, err))
+		slog.ErrorContext(ctx, "failed to run server.", slog.Any(logger.AttributeKeyError, err))
 		return
 	}
 }
