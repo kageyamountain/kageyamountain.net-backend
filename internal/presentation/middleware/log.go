@@ -20,8 +20,8 @@ func Log() gin.HandlerFunc {
 		// レスポンスヘッダーにRequestIDをセット
 		c.Header(HttpHeaderXRequestID, requestID)
 
-		// LogContextの設定
-		ctx := logger.InitLogContext(c.Request.Context())
+		// ログ属性の設定
+		ctx := logger.InitAttributes(c.Request.Context())
 		logger.SetAttribute(ctx, slog.String(logger.AttributeKeyLogType, logger.LogTypeApp))
 		logger.SetAttribute(ctx, slog.String("request_id", requestID))
 		logger.SetAttribute(ctx, slog.String("method", c.Request.Method))
