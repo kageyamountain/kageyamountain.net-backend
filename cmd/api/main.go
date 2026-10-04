@@ -55,11 +55,9 @@ func main() {
 // dev環境以外の場合はコンテナ起動時に環境変数を設定するためenvファイルは読み込まない
 func loadEnvFileOnlyDev() error {
 	env := os.Getenv("ENV")
-	if env == "dev" {
-		err := godotenv.Load(".env.dev")
-		if err != nil {
-			return err
-		}
+	if env != "dev" {
+		return nil
 	}
-	return nil
+
+	return godotenv.Load(".env.dev")
 }
