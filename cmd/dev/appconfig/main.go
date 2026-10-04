@@ -15,14 +15,14 @@ func main() {
 	// dev環境変数のロード
 	err := godotenv.Load(".env.dev")
 	if err != nil {
-		slog.ErrorContext(ctx, "failed to load .env file.", slog.Any(logger.AttrKeyError, err))
+		slog.ErrorContext(ctx, "failed to load .env file.", slog.Any(logger.AttributeKeyError, err))
 		return
 	}
 
 	// 環境変数をAppConfigへマッピング
 	appConfig, err := config.Load()
 	if err != nil {
-		slog.ErrorContext(ctx, "failed to AppConfig Load.", slog.Any(logger.AttrKeyError, err))
+		slog.ErrorContext(ctx, "failed to AppConfig Load.", slog.Any(logger.AttributeKeyError, err))
 		return
 	}
 

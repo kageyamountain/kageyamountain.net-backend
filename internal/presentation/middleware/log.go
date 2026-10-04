@@ -22,17 +22,17 @@ func Log() gin.HandlerFunc {
 
 		// LogContextの設定
 		ctx := logger.InitLogContext(c.Request.Context())
-		logger.SetAttr(ctx, slog.String(logger.AttrKeyLogType, logger.LogTypeApp))
-		logger.SetAttr(ctx, slog.String("request_id", requestID))
-		logger.SetAttr(ctx, slog.String("method", c.Request.Method))
-		logger.SetAttr(ctx, slog.String("path", c.Request.URL.Path))
+		logger.SetAttribute(ctx, slog.String(logger.AttributeKeyLogType, logger.LogTypeApp))
+		logger.SetAttribute(ctx, slog.String("request_id", requestID))
+		logger.SetAttribute(ctx, slog.String("method", c.Request.Method))
+		logger.SetAttribute(ctx, slog.String("path", c.Request.URL.Path))
 		c.Request = c.Request.WithContext(ctx)
 
 		c.Next()
 
 		// アクセスログを出力
 		slog.InfoContext(ctx, "access log",
-			slog.String(logger.AttrKeyLogType, logger.LogTypeAccess),
+			slog.String(logger.AttributeKeyLogType, logger.LogTypeAccess),
 			slog.String("host", c.Request.Host),
 			slog.String("uri", c.Request.URL.RequestURI()),
 			slog.Int("status", c.Writer.Status()),
