@@ -16,14 +16,7 @@ func main() {
 	ctx := context.Background()
 
 	// logger設定
-	logHandler := logger.NewHandler(
-		slog.NewJSONHandler(
-			os.Stdout,
-			&slog.HandlerOptions{
-				Level: slog.LevelInfo,
-			},
-		),
-	)
+	logHandler := logger.NewHandler(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	slog.SetDefault(slog.New(logHandler))
 
 	// Ginのデフォルトログを無効化
